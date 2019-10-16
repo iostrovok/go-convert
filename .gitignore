@@ -10,3 +10,23 @@
 
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
+
+
+/.idea
+/.env
+/.elasticbeanstalk
+/.vscode
+.DS_Store
+/etcd-passwords.txt
+
+# Testing artifacts
+/mockgen
+/coverage.out
+/coverage.html
+
+# Built artifact
+/application
+/application.zip
+/version.txt
+/vendor
+/bin
