@@ -1,7 +1,7 @@
 package convert
 
 import (
-	. "gopkg.in/check.v1"
+	. "github.com/iostrovok/check"
 )
 
 func (s *testSuite) TestBool(c *C) {

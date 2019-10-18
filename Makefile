@@ -44,3 +44,7 @@ mod:
 	GO111MODULE=on GONOSUMDB="*" GOPROXY=direct go mod vendor
 	GO111MODULE=on GONOSUMDB="*" GOPROXY=direct go mod download
 	GO111MODULE=on GONOSUMDB="*" GOPROXY=direct go mod verify
+
+clean_cache:
+	@go clean -cache
+	@go clean -testcache
