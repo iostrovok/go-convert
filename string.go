@@ -78,3 +78,68 @@ func String(in interface{}, debugKeys ...string) string {
 
 	return ""
 }
+
+func ListOfStringsP(in interface{}, checkLen bool, debugKeys ...string) []string {
+	a, err := _listOfStringsErr(in, checkLen, false, true, debugKeys...)
+	if err == nil {
+		return a
+	}
+	return []string{}
+}
+
+func ListOfStrings(in interface{}, checkLen bool, debugKeys ...string) []string {
+	a, err := _listOfStringsErr(in, checkLen, false, false, debugKeys...)
+	if err == nil {
+		return a
+	}
+	return []string{}
+}
+
+func ListOfStringsPErr(in interface{}, checkLen bool, debugKeys ...string) ([]string, error) {
+	return _listOfStringsErr(in, checkLen, true, false, debugKeys...)
+}
+
+func ListOfStringsErr(in interface{}, checkLen bool, debugKeys ...string) ([]string, error) {
+	return _listOfStringsErr(in, checkLen, false, false, debugKeys...)
+}
+
+func _listOfStringsErr(in interface{}, checkLen, checkEmpty, missEmpty bool, debugKeys ...string) ([]string, error) {
+	debugKey := ""
+	if len(debugKeys) > 0 {
+		debugKey = debugKeys[0]
+	}
+
+	if in == nil {
+		return nil, fmt.Errorf("ListOfStringsErr Wrong value for '%+v' [debugKey: %s]", in, debugKey)
+	}
+
+	it, err := Iterator(in, checkLen)
+	if err != nil {
+		return nil, fmt.Errorf("ListOfStringsErr Wrong value for '%+v' [debugKey: %s]", in, debugKey)
+	}
+
+	out := make([]string, 0)
+	for i := 0; i < it.Len(); i++ {
+		s := it.NextNotNil()
+		if s == nil {
+			return nil, fmt.Errorf("ListOfStringsErr Wrong value for '%+v' [debugKey: %s]", in, debugKey)
+		}
+
+		if checkEmpty {
+			s := String(s, debugKey+"/"+strconv.Itoa(len(out)))
+			if s == "" {
+				return nil, fmt.Errorf("ListOfStringsErr Empty string value for '%+v' [debugKey: %s]", in, debugKey)
+			}
+			out = append(out, s)
+		} else if missEmpty {
+			s := String(s, debugKey+"/"+strconv.Itoa(len(out)))
+			if s != "" {
+				out = append(out, s)
+			}
+		} else {
+			out = append(out, String(s, debugKey+"/"+strconv.Itoa(len(out))))
+		}
+	}
+
+	return out, nil
+}
