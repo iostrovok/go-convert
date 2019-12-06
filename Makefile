@@ -22,9 +22,14 @@ deps:
 test: tests
 
 tests:
-	@echo "Run race test for ./..."
-	@$(DIR) $(GODEBUG) go test -cover -race ./...
+	@echo "Run test ./..."
+	@$(DIR) $(GODEBUG) go test ./...
 
+tests-cover:
+	@echo "Run test  -cover -race -coverprofile=./coverage.out ./..."
+	@$(DIR) $(GODEBUG) go test  -cover -race -coverprofile=./coverage.out ./...
+	go tool cover -html=./coverage.out -o ./coverage.html
+	rm ./coverage.out
 
 lint:
 	@echo "======================================================================"
