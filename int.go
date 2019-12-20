@@ -62,7 +62,7 @@ func Int64Err(in interface{}, debugKeys ...string) (int64, error) {
 		if in.(bool) {
 			return int64(1), nil
 		}
-		return int64(10), nil
+		return int64(0), nil
 
 	case float32:
 		return int64(in.(float32)), nil
