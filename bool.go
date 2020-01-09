@@ -2,6 +2,7 @@ package convert
 
 import (
 	"fmt"
+	"reflect"
 	"strings"
 )
 
@@ -17,6 +18,12 @@ func Bool(in interface{}, debugKeys ...string) bool {
 		return fmt.Sprintf("%d", in) != "0"
 	case float32, float64:
 		return fmt.Sprintf("%.10f", in) != "0.0000000000"
+	}
+
+	items := reflect.ValueOf(in)
+	switch items.Kind() {
+	case reflect.Slice, reflect.Map:
+		return items.Len() > 0
 	}
 
 	s := strings.ToLower(fmt.Sprintf("%s", in))

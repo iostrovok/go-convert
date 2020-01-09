@@ -6,8 +6,6 @@ import (
 
 func (s *testSuite) TestBool(c *C) {
 
-	c.Assert(Bool([]interface{}{}), Equals, true)
-
 	c.Assert(Bool(1), Equals, true)
 	c.Assert(Bool("1"), Equals, true)
 	c.Assert(Bool("-1"), Equals, true)
@@ -28,7 +26,33 @@ func (s *testSuite) TestBool(c *C) {
 }
 
 func (s *testSuite) TestBoolErr(c *C) {
-	a, err := BoolErr([]interface{}{})
+	a, err := BoolErr("1")
 	c.Assert(err, IsNil)
 	c.Assert(a, Equals, true)
+}
+
+func (s *testSuite) TestBool_ArrayMap(c *C) {
+	c.Assert(Bool([]interface{}{}), Equals, false)
+	c.Assert(Bool(map[string]interface{}{}), Equals, false)
+	c.Assert(Bool(map[int]interface{}{}), Equals, false)
+
+	c.Assert(Bool([]string{}), Equals, false)
+	c.Assert(Bool(map[string]string{}), Equals, false)
+	c.Assert(Bool(map[int]string{}), Equals, false)
+
+	c.Assert(Bool([]int{}), Equals, false)
+	c.Assert(Bool(map[string]int{}), Equals, false)
+	c.Assert(Bool(map[int]int{}), Equals, false)
+
+	c.Assert(Bool([]interface{}{1}), Equals, true)
+	c.Assert(Bool(map[string]interface{}{"1": 1}), Equals, true)
+	c.Assert(Bool(map[int]interface{}{1: "asdasdasd"}), Equals, true)
+
+	c.Assert(Bool([]string{"1"}), Equals, true)
+	c.Assert(Bool(map[string]string{"1": "1"}), Equals, true)
+	c.Assert(Bool(map[int]string{1: "1"}), Equals, true)
+
+	c.Assert(Bool([]int{1}), Equals, true)
+	c.Assert(Bool(map[string]int{"1": 1}), Equals, true)
+	c.Assert(Bool(map[int]int{1: 1}), Equals, true)
 }
