@@ -1,7 +1,7 @@
 package convert
 
 /*
-	Iterator over interfaca
+	Iterator over slice of interfaces
 */
 
 import (
