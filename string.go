@@ -38,9 +38,9 @@ func String(in interface{}, debugKeys ...string) string {
 
 	switch in.(type) {
 	case []byte:
-		return strings.TrimSpace(in.(string))
+		return string(in.([]byte))
 	case string:
-		return strings.TrimSpace(in.(string))
+		return in.(string)
 	case bool:
 		return strconv.FormatBool(in.(bool))
 
