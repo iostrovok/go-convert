@@ -30,6 +30,11 @@ func isScalar(in interface{}) bool {
 	return true
 }
 
+// String Trim spaces
+func StringTS(in interface{}, debugKeys ...string) string {
+	return strings.TrimSpace(String(in, debugKeys...))
+}
+
 func String(in interface{}, debugKeys ...string) string {
 
 	if in == nil {
