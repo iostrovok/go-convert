@@ -17,7 +17,7 @@ type It struct {
 func Iterator(i interface{}, checkLen ...bool) (*It, error) {
 	items := reflect.ValueOf(i)
 	if items.Kind() != reflect.Slice {
-		return nil, fmt.Errorf("Data is not a list/slice")
+		return nil, fmt.Errorf("data is not a list/slice")
 	}
 
 	if len(checkLen) > 0 && checkLen[0] && items.Len() == 0 {

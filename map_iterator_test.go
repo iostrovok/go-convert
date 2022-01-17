@@ -1,33 +1,35 @@
-package convert
+package convert_test
 
 import (
 	. "github.com/iostrovok/check"
+
+	"github.com/iostrovok/go-convert"
 )
 
 func (s *testSuite) TestMapIteratorEmpty(c *C) {
 
-	iter, err := MapIterator(map[string]interface{}{})
+	iter, err := convert.MapIterator(map[string]interface{}{})
 	c.Assert(err, IsNil)
 	c.Assert(iter.HasNext(), Equals, false)
 	a, b := iter.Next()
 	c.Assert(a, IsNil)
 	c.Assert(b, IsNil)
 
-	iter, err = MapIterator(map[string]int32{})
+	iter, err = convert.MapIterator(map[string]int32{})
 	c.Assert(err, IsNil)
 	c.Assert(iter.HasNext(), Equals, false)
 	a, b = iter.Next()
 	c.Assert(a, IsNil)
 	c.Assert(b, IsNil)
 
-	iter, err = MapIterator(map[int][]int32{})
+	iter, err = convert.MapIterator(map[int][]int32{})
 	c.Assert(err, IsNil)
 	c.Assert(iter.HasNext(), Equals, false)
 	a, b = iter.Next()
 	c.Assert(a, IsNil)
 	c.Assert(b, IsNil)
 
-	iter, err = MapIterator(map[string]string{})
+	iter, err = convert.MapIterator(map[string]string{})
 	c.Assert(err, IsNil)
 	c.Assert(iter.HasNext(), Equals, false)
 	a, b = iter.Next()
@@ -37,10 +39,10 @@ func (s *testSuite) TestMapIteratorEmpty(c *C) {
 
 func (s *testSuite) TestMapIteratorLength(c *C) {
 
-	_, err := MapIterator(map[string]interface{}{}, true)
+	_, err := convert.MapIterator(map[string]interface{}{}, true)
 	c.Assert(err, NotNil)
 
-	_, err = MapIterator(map[int][]int32{}, true)
+	_, err = convert.MapIterator(map[int][]int32{}, true)
 	c.Assert(err, NotNil)
 }
 
@@ -53,7 +55,7 @@ func (s *testSuite) TestMapIteratorRun_1(c *C) {
 		"d": "b",
 	}
 
-	iter, err := MapIterator(data)
+	iter, err := convert.MapIterator(data)
 	c.Assert(err, IsNil)
 	c.Assert(iter.HasNext(), Equals, true)
 
@@ -64,7 +66,7 @@ func (s *testSuite) TestMapIteratorRun_1(c *C) {
 
 		k, v := iter.Next()
 
-		val, find := data[String(k)]
+		val, find := data[convert.String(k)]
 		c.Assert(find, Equals, true)
 		c.Assert(val, Equals, v)
 	}

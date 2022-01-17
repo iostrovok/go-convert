@@ -115,25 +115,25 @@ func _listOfStringsErr(in interface{}, checkLen, checkEmpty, missEmpty bool, deb
 	}
 
 	if in == nil {
-		return nil, fmt.Errorf("ListOfStringsErr Wrong value for '%+v' [debugKey: %s]", in, debugKey)
+		return nil, fmt.Errorf("ListOfStringsErr null value for '%+v' [debugKey: %s]", in, debugKey)
 	}
 
 	it, err := Iterator(in, checkLen)
 	if err != nil {
-		return nil, fmt.Errorf("ListOfStringsErr Wrong value for '%+v' [debugKey: %s]", in, debugKey)
+		return nil, fmt.Errorf("ListOfStringsErr wrong iterator value for '%+v' [debugKey: %s]", in, debugKey)
 	}
 
 	out := make([]string, 0)
 	for i := 0; i < it.Len(); i++ {
 		s := it.NextNotNil()
 		if s == nil {
-			return nil, fmt.Errorf("ListOfStringsErr Wrong value for '%+v' [debugKey: %s]", in, debugKey)
+			return nil, fmt.Errorf("ListOfStringsErr wrong next value for '%+v' [debugKey: %s]", in, debugKey)
 		}
 
 		if checkEmpty {
 			s := String(s, debugKey+"/"+strconv.Itoa(len(out)))
 			if s == "" {
-				return nil, fmt.Errorf("ListOfStringsErr Empty string value for '%+v' [debugKey: %s]", in, debugKey)
+				return nil, fmt.Errorf("ListOfStringsErr empty string value for '%+v' [debugKey: %s]", in, debugKey)
 			}
 			out = append(out, s)
 		} else if missEmpty {

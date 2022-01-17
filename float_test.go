@@ -1,10 +1,12 @@
-package convert
+package convert_test
 
 import (
 	"math"
 	"reflect"
 
 	. "github.com/iostrovok/check"
+
+	"github.com/iostrovok/go-convert"
 )
 
 type oneFloat64Test struct {
@@ -35,7 +37,6 @@ func (s *testSuite) TestFloat64Err(c *C) {
 		{float32(3049.24343), float64(float32(3049.24343)), false},
 		{3049.24343, 3049.24343, false},
 
-
 		{3049, 3049, false},
 		{int8(32), 32, false},
 		{int16(32), 32, false},
@@ -50,7 +51,7 @@ func (s *testSuite) TestFloat64Err(c *C) {
 	}
 
 	for _, one := range testList {
-		f64, err := _float64Err(one.val)
+		f64, err := convert.BaseFloat64Err(one.val)
 		if one.isError {
 			c.Assert(err, NotNil)
 		} else {
@@ -77,7 +78,7 @@ func (s *testSuite) TestFloat64(c *C) {
 	}
 
 	for _, one := range testList {
-		c.Assert(Float64(one.val), Equals, one.result)
+		c.Assert(convert.Float64(one.val), Equals, one.result)
 	}
 }
 
@@ -104,7 +105,7 @@ func (s *testSuite) TestFloat32Err(c *C) {
 	}
 
 	for _, one := range testList {
-		f32, err := Float32Err(one.val)
+		f32, err := convert.Float32Err(one.val)
 		if one.isError {
 			c.Assert(err, NotNil)
 		} else {
@@ -128,13 +129,11 @@ func (s *testSuite) TestFloat32(c *C) {
 		{math.MaxInt64, float32(math.MaxInt64), false},
 		{reflect.Invalid, 0, false},
 
-
 		{true, 1, false},
 		{false, 0, false},
 
 		{float32(3049.24343), 3049.24343, false},
 		{3049.24343, 3049.24343, false},
-
 
 		{3049, 3049, false},
 		{int8(32), 32, false},
@@ -150,6 +149,6 @@ func (s *testSuite) TestFloat32(c *C) {
 	}
 
 	for _, one := range testList {
-		c.Assert(Float32(one.val), Equals, one.result)
+		c.Assert(convert.Float32(one.val), Equals, one.result)
 	}
 }

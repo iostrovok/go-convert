@@ -24,7 +24,7 @@ func Float32(in interface{}, debugKeys ...string) float32 {
 }
 
 func Float64Err(in interface{}, debugKeys ...string) (float64, error) {
-	f, err := _float64Err(in, debugKeys...)
+	f, err := BaseFloat64Err(in, debugKeys...)
 	if err != nil {
 		return 0, err
 	}
@@ -36,16 +36,16 @@ func Float64Err(in interface{}, debugKeys ...string) (float64, error) {
 	return f, nil
 }
 
-func _float64Err(in interface{}, debugKeys ...string) (float64, error) {
+func BaseFloat64Err(in interface{}, debugKeys ...string) (float64, error) {
 
 	if in == nil {
-		return .0, fmt.Errorf("Float64Err Wrong value for '%+v' [keys: %+v]", in, debugKeys)
+		return .0, fmt.Errorf("Float64Err null value for '%+v' [keys: %+v]", in, debugKeys)
 	}
 
 	switch in.(type) {
 
 	case reflect.Kind:
-		return 0, fmt.Errorf("Float64Err Wrong value for '%+v' [keys: %+v]", in, debugKeys)
+		return 0, fmt.Errorf("Float64Err wrong value for '%+v' [keys: %+v]", in, debugKeys)
 
 	case float64:
 		return in.(float64), nil
@@ -82,25 +82,25 @@ func _float64Err(in interface{}, debugKeys ...string) (float64, error) {
 	case string:
 		f, err := strconv.ParseFloat(in.(string), 64)
 		if err != nil {
-			return 0, fmt.Errorf("Float64Err Wrong value for '%+v' [keys: %+v]", in, debugKeys)
+			return 0, fmt.Errorf("Float64Err wrong common value for '%+v' [keys: %+v]", in, debugKeys)
 		}
 		return f, nil
 
 	}
 
-	return 0, fmt.Errorf("Float64Err Wrong value for '%+v' [keys: %+v]", in, debugKeys)
+	return 0, fmt.Errorf("Float64Err wrong unreachable value for '%+v' [keys: %+v]", in, debugKeys)
 }
 
 func Float32Err(in interface{}, debugKeys ...string) (float32, error) {
 
 	if in == nil {
-		return .0, fmt.Errorf("Float32Err Wrong value for '%+v' [keys: %+v]", in, debugKeys)
+		return .0, fmt.Errorf("Float32Err null value for '%+v' [keys: %+v]", in, debugKeys)
 	}
 
 	switch in.(type) {
 
 	case reflect.Kind:
-		return 0, fmt.Errorf("Float32Err Wrong value for '%+v' [keys: %+v]", in, debugKeys)
+		return 0, fmt.Errorf("Float32Err wrong value for '%+v' [keys: %+v]", in, debugKeys)
 
 	case float64:
 		f64 := in.(float64)
@@ -139,11 +139,11 @@ func Float32Err(in interface{}, debugKeys ...string) (float32, error) {
 	case string:
 		f, err := strconv.ParseFloat(in.(string), 32)
 		if err != nil {
-			return 0, fmt.Errorf("Float32Err Wrong value for '%+v' [keys: %+v]", in, debugKeys)
+			return 0, fmt.Errorf("Float32Err wrong common value for '%+v' [keys: %+v]", in, debugKeys)
 		}
 		return float32(f), nil
 
 	}
 
-	return 0, fmt.Errorf("Float32Err Wrong value for '%+v' [keys: %+v]", in, debugKeys)
+	return 0, fmt.Errorf("Float32Err wrong unreachable value for '%+v' [keys: %+v]", in, debugKeys)
 }

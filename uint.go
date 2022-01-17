@@ -15,7 +15,7 @@ func Uint32(in interface{}, debugKeys ...string) uint32 {
 	out, err := Uint32Err(in, debugKeys...)
 	if err != nil {
 		if len(debugKeys) > 0 {
-			log.Printf("Uint64 Wrong value for '%+v' [keys: %+v], error: %v", in, debugKeys, err)
+			log.Printf("Uint32 wrong value for '%+v' [keys: %+v], error: %v", in, debugKeys, err)
 		}
 		return 0
 	}
@@ -30,7 +30,7 @@ func Uint32Err(in interface{}, debugKeys ...string) (uint32, error) {
 	}
 
 	if u64 > math.MaxUint32 {
-		return 0, fmt.Errorf("Uint64Err Wrong value for '%+v'", in)
+		return 0, fmt.Errorf("Uint32Err wrong value for '%+v'", in)
 	}
 
 	return uint32(u64), nil
@@ -41,7 +41,7 @@ func Uint64(in interface{}, debugKeys ...string) uint64 {
 	out, err := Uint64Err(in, debugKeys...)
 	if err != nil {
 		if len(debugKeys) > 0 {
-			log.Printf("Uint64 Wrong value for '%+v' [keys: %+v]", in, debugKeys)
+			log.Printf("Uint64 wrong value for '%+v' [keys: %+v]", in, debugKeys)
 		}
 	}
 
@@ -93,5 +93,5 @@ func Uint64Err(in interface{}, debugKeys ...string) (uint64, error) {
 		return strconv.ParseUint(in.(string), 10, 64)
 	}
 
-	return uint64(0), fmt.Errorf("Int64Err Wrong value for '%+v' [keys: %+v]", in, debugKeys)
+	return uint64(0), fmt.Errorf("Uint64Err wrong value for '%+v' [keys: %+v]", in, debugKeys)
 }
