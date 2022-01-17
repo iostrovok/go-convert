@@ -1,43 +1,42 @@
-package convert
+package convert_test
 
 import (
 	. "github.com/iostrovok/check"
+
+	"github.com/iostrovok/go-convert"
 )
 
 func (s *testSuite) TestSimple(c *C) {
-
-	iter, err := Iterator([]interface{}{})
+	iter, err := convert.Iterator([]interface{}{})
 	c.Assert(err, IsNil)
 	c.Assert(iter.NextNotNil(), IsNil)
 
-	iter, err = Iterator([]string{})
+	iter, err = convert.Iterator([]string{})
 	c.Assert(err, IsNil)
 	c.Assert(iter.NextNotNil(), IsNil)
 
-	iter, err = Iterator([]string{}, false)
+	iter, err = convert.Iterator([]string{}, false)
 	c.Assert(err, IsNil)
 	c.Assert(iter.NextNotNil(), IsNil)
 
-	iter, err = Iterator([]int{1})
+	iter, err = convert.Iterator([]int{1})
 	c.Assert(err, IsNil)
 	c.Assert(iter.NextNotNil(), DeepEquals, 1)
 	c.Assert(iter.NextNotNil(), IsNil)
 
-	_, err = Iterator("")
+	_, err = convert.Iterator("")
 	c.Assert(err, NotNil)
 }
 
 func (s *testSuite) TestLength(c *C) {
-
-	_, err := Iterator([]interface{}{}, true)
+	_, err := convert.Iterator([]interface{}{}, true)
 	c.Assert(err, NotNil)
 
-	_, err = Iterator([]string{}, true)
+	_, err = convert.Iterator([]string{}, true)
 	c.Assert(err, NotNil)
 }
 
 func (s *testSuite) TestIterator(c *C) {
-
 	data := []interface{}{
 		"a",
 		nil,
@@ -45,7 +44,7 @@ func (s *testSuite) TestIterator(c *C) {
 		"b",
 	}
 
-	iter, err := Iterator(data)
+	iter, err := convert.Iterator(data)
 	c.Assert(err, IsNil)
 
 	c.Assert(iter.NextNotNil(), Equals, "a")
@@ -55,7 +54,6 @@ func (s *testSuite) TestIterator(c *C) {
 }
 
 func (s *testSuite) TestNextNotEmptyString(c *C) {
-
 	data := []interface{}{
 		"a",
 		nil,
@@ -64,7 +62,7 @@ func (s *testSuite) TestNextNotEmptyString(c *C) {
 		"",
 	}
 
-	iter, err := Iterator(data)
+	iter, err := convert.Iterator(data)
 	c.Assert(err, IsNil)
 
 	str := iter.NextNotEmptyString()
@@ -79,21 +77,19 @@ func (s *testSuite) TestNextNotEmptyString(c *C) {
 }
 
 func (s *testSuite) TestCheckMapStringType(c *C) {
-
-	_, notFind := CheckMapStringType(nil)
+	_, notFind := convert.CheckMapStringType(nil)
 	c.Assert(notFind, Equals, false)
 
 	a := map[string]interface{}{
 		"string_a": 1,
 	}
-	check, find := CheckMapStringType(a)
+	check, find := convert.CheckMapStringType(a)
 
 	c.Assert(find, Equals, true)
 	c.Assert(check, DeepEquals, a)
 }
 
 func (s *testSuite) TestNextNotNilMapString(c *C) {
-
 	a := map[string]interface{}{
 		"string_a": 1,
 	}
@@ -115,7 +111,7 @@ func (s *testSuite) TestNextNotNilMapString(c *C) {
 		d,
 	}
 
-	iter, err := Iterator(data)
+	iter, err := convert.Iterator(data)
 	c.Assert(err, IsNil)
 
 	c.Assert(iter.NextNotNilMapString(), DeepEquals, a)
