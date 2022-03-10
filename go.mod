@@ -2,7 +2,7 @@ module github.com/iostrovok/go-convert
 
 go 1.17
 
-require github.com/iostrovok/check v0.0.11
+require github.com/iostrovok/check v0.0.13
 
 require (
 	github.com/kr/text v0.1.0 // indirect
