@@ -20,6 +20,7 @@ func (s *testSuite) TestFloat64Err(c *C) {
 		{"", 0, true},
 		{"wqeqwe", 0, true},
 		{"3049", 3049, false},
+		{[]byte("3049"), 3049, false},
 
 		{nil, 0, true},
 
@@ -66,6 +67,7 @@ func (s *testSuite) TestFloat64(c *C) {
 		{"", 0, false},
 		{nil, 0, false},
 		{"3049", 3049, false},
+		{[]byte("3049"), 3049, false},
 		{int32(3049), 3049, false},
 		{int64(3049), 3049, false},
 		{3049, 3049, false},

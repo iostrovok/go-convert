@@ -89,6 +89,8 @@ func Uint64Err(in interface{}, debugKeys ...string) (uint64, error) {
 	case int64:
 		return uint64(in.(int64)), nil
 
+	case []byte:
+		return strconv.ParseUint(string(in.([]byte)), 10, 64)
 	case string:
 		return strconv.ParseUint(in.(string), 10, 64)
 	}
