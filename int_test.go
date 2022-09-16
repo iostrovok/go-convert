@@ -11,6 +11,7 @@ import (
 func (s *testSuite) TestInt64(c *C) {
 	c.Assert(convert.Int64(""), Equals, int64(0))
 	c.Assert(convert.Int64("3049"), Equals, int64(3049))
+	c.Assert(convert.Int64([]byte("3049")), Equals, int64(3049))
 	c.Assert(convert.Int64(int32(3049)), Equals, int64(3049))
 	c.Assert(convert.Int64(int64(3049)), Equals, int64(3049))
 	c.Assert(convert.Int64(3049), Equals, int64(3049))
@@ -20,6 +21,7 @@ func (s *testSuite) TestInt64(c *C) {
 func (s *testSuite) TestInt32(c *C) {
 	c.Assert(convert.Int32(""), Equals, int32(0))
 	c.Assert(convert.Int32("3049"), Equals, int32(3049))
+	c.Assert(convert.Int32([]byte("3049")), Equals, int32(3049))
 	c.Assert(convert.Int32(int32(3049)), Equals, int32(3049))
 	c.Assert(convert.Int32(int64(3049)), Equals, int32(3049))
 	c.Assert(convert.Int32(3049), Equals, int32(3049))

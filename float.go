@@ -79,6 +79,12 @@ func BaseFloat64Err(in interface{}, debugKeys ...string) (float64, error) {
 		return float64(in.(int)), nil
 	case int64:
 		return float64(in.(int64)), nil
+	case []byte:
+		f, err := strconv.ParseFloat(string(in.([]byte)), 64)
+		if err != nil {
+			return 0, fmt.Errorf("Float64Err wrong common value for '%+v' [keys: %+v]", in, debugKeys)
+		}
+		return f, nil
 	case string:
 		f, err := strconv.ParseFloat(in.(string), 64)
 		if err != nil {
@@ -136,6 +142,12 @@ func Float32Err(in interface{}, debugKeys ...string) (float32, error) {
 		return float32(in.(int)), nil
 	case int64:
 		return float32(in.(int64)), nil
+	case []byte:
+		f, err := strconv.ParseFloat(string(in.([]byte)), 32)
+		if err != nil {
+			return 0, fmt.Errorf("Float32Err wrong common value for '%+v' [keys: %+v]", in, debugKeys)
+		}
+		return float32(f), nil
 	case string:
 		f, err := strconv.ParseFloat(in.(string), 32)
 		if err != nil {
