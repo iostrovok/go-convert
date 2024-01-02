@@ -1,42 +1,42 @@
 package convert_test
 
 import (
-	. "github.com/iostrovok/check"
+	"testing"
 
 	"github.com/iostrovok/go-convert"
 )
 
-func (s *testSuite) TestSimple(c *C) {
+func TestSimple(t *testing.T) {
 	iter, err := convert.Iterator([]interface{}{})
-	c.Assert(err, IsNil)
-	c.Assert(iter.NextNotNil(), IsNil)
+	Nil2(t, err)
+	Nil2(t, iter.NextNotNil())
 
 	iter, err = convert.Iterator([]string{})
-	c.Assert(err, IsNil)
-	c.Assert(iter.NextNotNil(), IsNil)
+	Nil2(t, err)
+	Nil2(t, iter.NextNotNil())
 
 	iter, err = convert.Iterator([]string{}, false)
-	c.Assert(err, IsNil)
-	c.Assert(iter.NextNotNil(), IsNil)
+	Nil2(t, err)
+	Nil2(t, iter.NextNotNil())
 
 	iter, err = convert.Iterator([]int{1})
-	c.Assert(err, IsNil)
-	c.Assert(iter.NextNotNil(), DeepEquals, 1)
-	c.Assert(iter.NextNotNil(), IsNil)
+	Nil2(t, err)
+	Equal(t, iter.NextNotNil(), 1)
+	Nil2(t, iter.NextNotNil())
 
 	_, err = convert.Iterator("")
-	c.Assert(err, NotNil)
+	NotNil2(t, err)
 }
 
-func (s *testSuite) TestLength(c *C) {
+func TestLength(t *testing.T) {
 	_, err := convert.Iterator([]interface{}{}, true)
-	c.Assert(err, NotNil)
+	NotNil2(t, err)
 
 	_, err = convert.Iterator([]string{}, true)
-	c.Assert(err, NotNil)
+	NotNil2(t, err)
 }
 
-func (s *testSuite) TestIterator(c *C) {
+func TestIterator(t *testing.T) {
 	data := []interface{}{
 		"a",
 		nil,
@@ -45,15 +45,15 @@ func (s *testSuite) TestIterator(c *C) {
 	}
 
 	iter, err := convert.Iterator(data)
-	c.Assert(err, IsNil)
+	Nil2(t, err)
 
-	c.Assert(iter.NextNotNil(), Equals, "a")
-	c.Assert(iter.NextNotNil(), Equals, 1)
-	c.Assert(iter.NextNotNil(), Equals, "b")
-	c.Assert(iter.NextNotNil(), IsNil)
+	Equal(t, iter.NextNotNil(), "a")
+	Equal(t, iter.NextNotNil(), 1)
+	Equal(t, iter.NextNotNil(), "b")
+	Nil2(t, iter.NextNotNil())
 }
 
-func (s *testSuite) TestNextNotEmptyString(c *C) {
+func TestNextNotEmptyString(t *testing.T) {
 	data := []interface{}{
 		"a",
 		nil,
@@ -63,33 +63,36 @@ func (s *testSuite) TestNextNotEmptyString(c *C) {
 	}
 
 	iter, err := convert.Iterator(data)
-	c.Assert(err, IsNil)
+	Nil2(t, err)
 
 	str := iter.NextNotEmptyString()
-	c.Assert(str, Equals, "a")
+	Equal(t, str, "a")
 
 	str = iter.NextNotEmptyString()
-	c.Assert(str, Equals, "b")
+	Equal(t, str, "b")
 
 	str = iter.NextNotEmptyString()
-	c.Assert(str, Equals, "")
+	Equal(t, str, "")
 
 }
 
-func (s *testSuite) TestCheckMapStringType(c *C) {
+func TestCheckMapStringType(t *testing.T) {
 	_, notFind := convert.CheckMapStringType(nil)
-	c.Assert(notFind, Equals, false)
+	EqualBool(t, notFind, false)
 
 	a := map[string]interface{}{
 		"string_a": 1,
 	}
 	check, find := convert.CheckMapStringType(a)
 
-	c.Assert(find, Equals, true)
-	c.Assert(check, DeepEquals, a)
+	EqualBool(t, find, true)
+	Equal(t, len(check), len(a))
+	for k, v := range a {
+		Equal(t, check[k], v)
+	}
 }
 
-func (s *testSuite) TestNextNotNilMapString(c *C) {
+func TestNextNotNilMapString(t *testing.T) {
 	a := map[string]interface{}{
 		"string_a": 1,
 	}
@@ -112,10 +115,27 @@ func (s *testSuite) TestNextNotNilMapString(c *C) {
 	}
 
 	iter, err := convert.Iterator(data)
-	c.Assert(err, IsNil)
+	Nil2(t, err)
 
-	c.Assert(iter.NextNotNilMapString(), DeepEquals, a)
-	c.Assert(iter.NextNotNilMapString(), DeepEquals, b)
-	c.Assert(iter.NextNotNilMapString(), DeepEquals, d)
-	c.Assert(iter.NextNotNilMapString(), IsNil)
+	a1, find := iter.NextNotNilMapString()
+	EqualBool(t, find, true)
+	for k, v := range a {
+		Equal(t, a1[k], v)
+	}
+
+	b1, find := iter.NextNotNilMapString()
+	EqualBool(t, find, true)
+	for k, v := range b {
+		Equal(t, b1[k], v)
+	}
+
+	d1, find := iter.NextNotNilMapString()
+	EqualBool(t, find, true)
+	Equal(t, len(d1), len(d))
+	for k, v := range d {
+		Equal(t, d1[k], v)
+	}
+
+	_, find = iter.NextNotNilMapString()
+	EqualBool(t, find, false)
 }

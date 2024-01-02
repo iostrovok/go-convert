@@ -1,53 +1,50 @@
 package convert_test
 
 import (
-	. "github.com/iostrovok/check"
+	"testing"
 
 	"github.com/iostrovok/go-convert"
 )
 
-func (s *testSuite) TestMapIteratorEmpty(c *C) {
-
+func TestMapIteratorEmpty(t *testing.T) {
 	iter, err := convert.MapIterator(map[string]interface{}{})
-	c.Assert(err, IsNil)
-	c.Assert(iter.HasNext(), Equals, false)
+	Nil2(t, err)
+	EqualBool(t, iter.HasNext(), false)
 	a, b := iter.Next()
-	c.Assert(a, IsNil)
-	c.Assert(b, IsNil)
+	Nil2(t, a)
+	Nil2(t, b)
 
 	iter, err = convert.MapIterator(map[string]int32{})
-	c.Assert(err, IsNil)
-	c.Assert(iter.HasNext(), Equals, false)
+	Nil2(t, err)
+	EqualBool(t, iter.HasNext(), false)
 	a, b = iter.Next()
-	c.Assert(a, IsNil)
-	c.Assert(b, IsNil)
+	Nil2(t, a)
+	Nil2(t, b)
 
 	iter, err = convert.MapIterator(map[int][]int32{})
-	c.Assert(err, IsNil)
-	c.Assert(iter.HasNext(), Equals, false)
+	Nil2(t, err)
+	EqualBool(t, iter.HasNext(), false)
 	a, b = iter.Next()
-	c.Assert(a, IsNil)
-	c.Assert(b, IsNil)
+	Nil2(t, a)
+	Nil2(t, b)
 
 	iter, err = convert.MapIterator(map[string]string{})
-	c.Assert(err, IsNil)
-	c.Assert(iter.HasNext(), Equals, false)
+	Nil2(t, err)
+	EqualBool(t, iter.HasNext(), false)
 	a, b = iter.Next()
-	c.Assert(a, IsNil)
-	c.Assert(b, IsNil)
+	Nil2(t, a)
+	Nil2(t, b)
 }
 
-func (s *testSuite) TestMapIteratorLength(c *C) {
-
+func TestMapIteratorLength(t *testing.T) {
 	_, err := convert.MapIterator(map[string]interface{}{}, true)
-	c.Assert(err, NotNil)
+	NotNil2(t, err)
 
 	_, err = convert.MapIterator(map[int][]int32{}, true)
-	c.Assert(err, NotNil)
+	NotNil2(t, err)
 }
 
-func (s *testSuite) TestMapIteratorRun_1(c *C) {
-
+func TestMapIteratorRun_1(t *testing.T) {
 	data := map[string]interface{}{
 		"a": "a",
 		"b": nil,
@@ -56,8 +53,8 @@ func (s *testSuite) TestMapIteratorRun_1(c *C) {
 	}
 
 	iter, err := convert.MapIterator(data)
-	c.Assert(err, IsNil)
-	c.Assert(iter.HasNext(), Equals, true)
+	Nil2(t, err)
+	EqualBool(t, iter.HasNext(), true)
 
 	for {
 		if !iter.HasNext() {
@@ -67,7 +64,7 @@ func (s *testSuite) TestMapIteratorRun_1(c *C) {
 		k, v := iter.Next()
 
 		val, find := data[convert.String(k)]
-		c.Assert(find, Equals, true)
-		c.Assert(val, Equals, v)
+		EqualBool(t, find, true)
+		Equal(t, val, v)
 	}
 }

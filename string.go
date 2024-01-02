@@ -11,7 +11,7 @@ import (
 	It's long code but quick! ))
 */
 
-func isScalar(in interface{}) bool {
+func isScalar(in any) bool {
 	/*
 		Goods types:
 		   Bool Int8 Int Int16 Int32 Int64
@@ -30,13 +30,12 @@ func isScalar(in interface{}) bool {
 	return true
 }
 
-// String Trim spaces
-func StringTS(in interface{}, debugKeys ...string) string {
+// StringTS returns spaces trimmed string
+func StringTS(in any, debugKeys ...string) string {
 	return strings.TrimSpace(String(in, debugKeys...))
 }
 
-func String(in interface{}, debugKeys ...string) string {
-
+func String(in any, _ ...string) string {
 	if in == nil {
 		return ""
 	}
@@ -84,66 +83,92 @@ func String(in interface{}, debugKeys ...string) string {
 	return ""
 }
 
-func ListOfStringsP(in interface{}, checkLen bool, debugKeys ...string) []string {
-	a, err := _listOfStringsErr(in, checkLen, false, true, debugKeys...)
-	if err == nil {
+// ListOfStringsP ("List Of Strings Positive")
+// is exactly the same as ListOfStringsPErr, but always returns a list (can be empty).
+func ListOfStringsP(in any, debugKeys ...string) []string {
+	if a, err := ListOfStringsPErr(in, false, debugKeys...); err == nil {
 		return a
 	}
+
 	return []string{}
 }
 
-func ListOfStrings(in interface{}, checkLen bool, debugKeys ...string) []string {
-	a, err := _listOfStringsErr(in, checkLen, false, false, debugKeys...)
-	if err == nil {
+// ListOfStringsPErr ("List Of Strings Positive with Error")
+// returns a list of no-empty strings extracted from the input interface.
+// If the list contains an empty string, the function skips it.
+// If checkLen is true and the result list is empty, the function returns an error.
+func ListOfStringsPErr(in any, checkLen bool, debugKeys ...string) ([]string, error) {
+	return _listOfStrings(in, checkLen, SkipEmpty, debugKeys...)
+}
+
+// ListOfStringsStrictPErr ("List Of Strings Strict Positive with Error")
+// returns a list of no-empty strings extracted from the input interface.
+// If the list has empty string function returns the error.
+func ListOfStringsStrictPErr(in any, checkLen bool, debugKeys ...string) ([]string, error) {
+	return _listOfStrings(in, checkLen, FallOnEmpty, debugKeys...)
+}
+
+func ListOfStrings(in any, debugKeys ...string) []string {
+	if a, err := ListOfStringsErr(in, false, debugKeys...); err == nil {
 		return a
 	}
+
 	return []string{}
 }
 
-func ListOfStringsPErr(in interface{}, checkLen bool, debugKeys ...string) ([]string, error) {
-	return _listOfStringsErr(in, checkLen, true, false, debugKeys...)
+func ListOfStringsErr(in any, checkLen bool, debugKeys ...string) ([]string, error) {
+	return _listOfStrings(in, checkLen, PassAll, debugKeys...)
 }
 
-func ListOfStringsErr(in interface{}, checkLen bool, debugKeys ...string) ([]string, error) {
-	return _listOfStringsErr(in, checkLen, false, false, debugKeys...)
-}
+type StringListRunner string
 
-func _listOfStringsErr(in interface{}, checkLen, checkEmpty, missEmpty bool, debugKeys ...string) ([]string, error) {
+const (
+	PassAll     StringListRunner = "pass_all"
+	FallOnEmpty StringListRunner = "fall_on_empty"
+	SkipEmpty   StringListRunner = "skip_empty"
+)
+
+func _listOfStrings(in any, checkLen bool, howToRun StringListRunner, debugKeys ...string) ([]string, error) {
 	debugKey := ""
 	if len(debugKeys) > 0 {
 		debugKey = debugKeys[0]
 	}
 
 	if in == nil {
-		return nil, fmt.Errorf("ListOfStringsErr null value for '%+v' [debugKey: %s]", in, debugKey)
+		return nil, fmt.Errorf("null value for '%s'", debugKey)
 	}
 
 	it, err := Iterator(in, checkLen)
 	if err != nil {
-		return nil, fmt.Errorf("ListOfStringsErr wrong iterator value for '%+v' [debugKey: %s]", in, debugKey)
+		return nil, fmt.Errorf("wrong iterator value for '%s'", debugKey)
 	}
 
 	out := make([]string, 0)
 	for i := 0; i < it.Len(); i++ {
-		s := it.NextNotNil()
-		if s == nil {
-			return nil, fmt.Errorf("ListOfStringsErr wrong next value for '%+v' [debugKey: %s]", in, debugKey)
+		next := it.NextNotNil()
+		if next == nil {
+			return nil, fmt.Errorf("wrong next value for '%+v' [debugKey: %s]", next, debugKey)
 		}
 
-		if checkEmpty {
-			s := String(s, debugKey+"/"+strconv.Itoa(len(out)))
+		s := String(next)
+		switch howToRun {
+		case FallOnEmpty:
 			if s == "" {
-				return nil, fmt.Errorf("ListOfStringsErr empty string value for '%+v' [debugKey: %s]", in, debugKey)
+				return nil, fmt.Errorf("empty string value for '%+v' [debugKey: %s]", next, debugKey)
 			}
 			out = append(out, s)
-		} else if missEmpty {
-			s := String(s, debugKey+"/"+strconv.Itoa(len(out)))
+		case SkipEmpty:
 			if s != "" {
 				out = append(out, s)
 			}
-		} else {
-			out = append(out, String(s, debugKey+"/"+strconv.Itoa(len(out))))
+		default:
+			// PassAll
+			out = append(out, s)
 		}
+	}
+
+	if checkLen && len(out) == 0 {
+		return out, fmt.Errorf("the result list is empty for '%s'", debugKey)
 	}
 
 	return out, nil

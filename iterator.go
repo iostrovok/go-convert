@@ -43,20 +43,20 @@ func (it *It) NextNotNil() interface{} {
 	return nil
 }
 
-func (it *It) NextNotNilMapString() map[string]interface{} {
-
+func (it *It) NextNotNilMapString() (map[string]any, bool) {
 	for {
 		i := it.NextNotNil()
 		if i == nil {
-			return nil
+			return nil, false
 		}
+
 		out, find := CheckMapStringType(i)
 		if find {
-			return out
+			return out, true
 		}
 	}
 
-	return nil
+	return nil, false
 }
 
 func (it *It) NextNotEmptyString() string {
