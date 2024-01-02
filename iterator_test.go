@@ -7,7 +7,7 @@ import (
 )
 
 func TestSimple(t *testing.T) {
-	iter, err := convert.Iterator([]interface{}{})
+	iter, err := convert.Iterator([]any{})
 	Nil2(t, err)
 	Nil2(t, iter.NextNotNil())
 
@@ -29,7 +29,7 @@ func TestSimple(t *testing.T) {
 }
 
 func TestLength(t *testing.T) {
-	_, err := convert.Iterator([]interface{}{}, true)
+	_, err := convert.Iterator([]any{}, true)
 	NotNil2(t, err)
 
 	_, err = convert.Iterator([]string{}, true)
@@ -37,7 +37,7 @@ func TestLength(t *testing.T) {
 }
 
 func TestIterator(t *testing.T) {
-	data := []interface{}{
+	data := []any{
 		"a",
 		nil,
 		1,
@@ -54,7 +54,7 @@ func TestIterator(t *testing.T) {
 }
 
 func TestNextNotEmptyString(t *testing.T) {
-	data := []interface{}{
+	data := []any{
 		"a",
 		nil,
 		"",
@@ -80,7 +80,7 @@ func TestCheckMapStringType(t *testing.T) {
 	_, notFind := convert.CheckMapStringType(nil)
 	EqualBool(t, notFind, false)
 
-	a := map[string]interface{}{
+	a := map[string]any{
 		"string_a": 1,
 	}
 	check, find := convert.CheckMapStringType(a)
@@ -93,21 +93,21 @@ func TestCheckMapStringType(t *testing.T) {
 }
 
 func TestNextNotNilMapString(t *testing.T) {
-	a := map[string]interface{}{
+	a := map[string]any{
 		"string_a": 1,
 	}
 
-	b := map[string]interface{}{
+	b := map[string]any{
 		"string_b1": 0,
 		"string_b2": "super",
 	}
 
-	d := map[string]interface{}{
+	d := map[string]any{
 		"string_c1": "super",
 		"string_c2": "puper",
 	}
 
-	data := []interface{}{
+	data := []any{
 		a,
 		b,
 		nil,

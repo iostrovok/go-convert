@@ -11,7 +11,7 @@ import (
 	"strconv"
 )
 
-func Uint32(in interface{}, debugKeys ...string) uint32 {
+func Uint32(in any, debugKeys ...string) uint32 {
 	out, err := Uint32Err(in, debugKeys...)
 	if err != nil {
 		if len(debugKeys) > 0 {
@@ -23,7 +23,7 @@ func Uint32(in interface{}, debugKeys ...string) uint32 {
 	return out
 }
 
-func Uint32Err(in interface{}, debugKeys ...string) (uint32, error) {
+func Uint32Err(in any, debugKeys ...string) (uint32, error) {
 	u64, err := Uint64Err(in, debugKeys...)
 	if err != nil {
 		return 0, err
@@ -36,7 +36,7 @@ func Uint32Err(in interface{}, debugKeys ...string) (uint32, error) {
 	return uint32(u64), nil
 }
 
-func Uint64(in interface{}, debugKeys ...string) uint64 {
+func Uint64(in any, debugKeys ...string) uint64 {
 
 	out, err := Uint64Err(in, debugKeys...)
 	if err != nil {
@@ -48,7 +48,7 @@ func Uint64(in interface{}, debugKeys ...string) uint64 {
 	return out
 }
 
-func Uint64Err(in interface{}, debugKeys ...string) (uint64, error) {
+func Uint64Err(in any, debugKeys ...string) (uint64, error) {
 
 	if in == nil {
 		return uint64(0), nil

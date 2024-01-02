@@ -9,7 +9,7 @@ import (
 )
 
 type oneFloat64Test struct {
-	val     interface{}
+	val     any
 	result  float64
 	isError bool
 }
@@ -82,7 +82,7 @@ func TestFloat64(t *testing.T) {
 }
 
 type oneFloat32Test struct {
-	val     interface{}
+	val     any
 	result  float32
 	isError bool
 }

@@ -54,9 +54,9 @@ func TestBoolErr(t *testing.T) {
 }
 
 func TestBool_ArrayMap(t *testing.T) {
-	EqualBool(t, convert.Bool([]interface{}{}), false)
-	EqualBool(t, convert.Bool(map[string]interface{}{}), false)
-	EqualBool(t, convert.Bool(map[int]interface{}{}), false)
+	EqualBool(t, convert.Bool([]any{}), false)
+	EqualBool(t, convert.Bool(map[string]any{}), false)
+	EqualBool(t, convert.Bool(map[int]any{}), false)
 
 	EqualBool(t, convert.Bool([]string{}), false)
 	EqualBool(t, convert.Bool(map[string]string{}), false)
@@ -66,9 +66,9 @@ func TestBool_ArrayMap(t *testing.T) {
 	EqualBool(t, convert.Bool(map[string]int{}), false)
 	EqualBool(t, convert.Bool(map[int]int{}), false)
 
-	EqualBool(t, convert.Bool([]interface{}{1}), true)
-	EqualBool(t, convert.Bool(map[string]interface{}{"1": 1}), true)
-	EqualBool(t, convert.Bool(map[int]interface{}{1: "asdasdasd"}), true)
+	EqualBool(t, convert.Bool([]any{1}), true)
+	EqualBool(t, convert.Bool(map[string]any{"1": 1}), true)
+	EqualBool(t, convert.Bool(map[int]any{1: "asdasdasd"}), true)
 
 	EqualBool(t, convert.Bool([]string{"1"}), true)
 	EqualBool(t, convert.Bool(map[string]string{"1": "1"}), true)

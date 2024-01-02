@@ -26,7 +26,7 @@ func TestInt32(t *testing.T) {
 }
 
 func TestListOfInt64Err(t *testing.T) {
-	res, err := convert.ListOfInt64Err([]interface{}{
+	res, err := convert.ListOfInt64Err([]any{
 		"1", 12, 45, 123412323, -1, 0,
 	}, false)
 
@@ -39,27 +39,27 @@ func TestListOfInt64Err(t *testing.T) {
 }
 
 func TestListOfInt64Err2(t *testing.T) {
-	_, err := convert.ListOfInt64Err([]interface{}{
+	_, err := convert.ListOfInt64Err([]any{
 		"1", 12, 45, nil, -1, 0,
 	}, false)
 	NotNil2(t, err)
 
-	_, err = convert.ListOfInt64Err([]interface{}{
+	_, err = convert.ListOfInt64Err([]any{
 		"", 12, 45, -1, 0,
 	}, false)
 	NotNil2(t, err)
 }
 
 func TestListOfInt64ErrEmpty(t *testing.T) {
-	_, err := convert.ListOfInt64Err([]interface{}{}, false)
+	_, err := convert.ListOfInt64Err([]any{}, false)
 	Nil2(t, err)
 
-	_, err = convert.ListOfInt64Err([]interface{}{}, true)
+	_, err = convert.ListOfInt64Err([]any{}, true)
 	NotNil2(t, err)
 }
 
 func TestListOfInt32Err(t *testing.T) {
-	res, err := convert.ListOfInt32Err([]interface{}{
+	res, err := convert.ListOfInt32Err([]any{
 		"1", 12, 45, 123412323, -1, 0,
 	}, false)
 
@@ -72,31 +72,31 @@ func TestListOfInt32Err(t *testing.T) {
 }
 
 func TestListOfInt32Err2(t *testing.T) {
-	_, err := convert.ListOfInt32Err([]interface{}{
+	_, err := convert.ListOfInt32Err([]any{
 		"1", 12, 45, nil, -1, 0,
 	}, false)
 	NotNil2(t, err)
 
-	_, err = convert.ListOfInt32Err([]interface{}{
+	_, err = convert.ListOfInt32Err([]any{
 		"", 12, 45, -1, 0,
 	}, false)
 	NotNil2(t, err)
 
-	_, err = convert.ListOfInt32Err([]interface{}{
+	_, err = convert.ListOfInt32Err([]any{
 		"1", 12, 45, 123412323, -1, 0, math.MaxInt64,
 	}, false)
 	NotNil2(t, err)
 
-	_, err = convert.ListOfInt32Err([]interface{}{
+	_, err = convert.ListOfInt32Err([]any{
 		"1", 12, 45, 123412323, -1, 0, math.MinInt64,
 	}, false)
 	NotNil2(t, err)
 }
 
 func TestListOfInt32ErrEmpty(t *testing.T) {
-	_, err := convert.ListOfInt32Err([]interface{}{}, false)
+	_, err := convert.ListOfInt32Err([]any{}, false)
 	Nil2(t, err)
 
-	_, err = convert.ListOfInt32Err([]interface{}{}, true)
+	_, err = convert.ListOfInt32Err([]any{}, true)
 	NotNil2(t, err)
 }

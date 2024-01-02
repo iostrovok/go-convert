@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-func Bool(in interface{}, debugKeys ...string) bool {
+func Bool(in any) bool {
 	if in == nil {
 		return false
 	}
@@ -18,18 +18,28 @@ func Bool(in interface{}, debugKeys ...string) bool {
 		return fmt.Sprintf("%d", in) != "0"
 	case float32, float64:
 		return fmt.Sprintf("%.10f", in) != "0.0000000000"
+	case string:
+		switch strings.ToLower(fmt.Sprintf("%s", in)) {
+		case "", "false", "f", "0":
+			return false
+		default:
+			return true
+		}
 	}
 
 	items := reflect.ValueOf(in)
-	switch items.Kind() {
-	case reflect.Slice, reflect.Map:
+	if items.Kind() == reflect.Slice || items.Kind() == reflect.Map {
 		return items.Len() > 0
 	}
 
-	s := strings.ToLower(fmt.Sprintf("%s", in))
-	return s != "" && s != "false" && s != "f" && s != "0"
+	switch strings.ToLower(fmt.Sprintf("%s", in)) {
+	case "", "false", "f", "0":
+		return false
+	default:
+		return true
+	}
 }
 
-func BoolErr(in interface{}, debugKeys ...string) (bool, error) {
+func BoolErr(in any) (bool, error) {
 	return Bool(in), nil
 }

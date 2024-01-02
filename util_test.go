@@ -44,7 +44,7 @@ func EqualBool(t *testing.T, obtained, expected bool) {
 	}
 }
 
-func isType(a, b interface{}) bool {
+func isType(a, b any) bool {
 	return reflect.TypeOf(a) == reflect.TypeOf(b)
 }
 

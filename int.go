@@ -10,7 +10,7 @@ import (
 	"strconv"
 )
 
-func Int32(in interface{}, debugKeys ...string) int32 {
+func Int32(in any, debugKeys ...string) int32 {
 	i64, err := Int64Err(in, debugKeys...)
 	if err != nil || i64 > math.MaxInt32 || i64 < math.MinInt32 {
 		return int32(0)
@@ -19,7 +19,7 @@ func Int32(in interface{}, debugKeys ...string) int32 {
 	return int32(i64)
 }
 
-func Int(in interface{}, debugKeys ...string) int {
+func Int(in any, debugKeys ...string) int {
 	i64, err := Int64Err(in, debugKeys...)
 	if err != nil {
 		return 0
@@ -27,7 +27,7 @@ func Int(in interface{}, debugKeys ...string) int {
 	return int(i64)
 }
 
-func Int64(in interface{}, debugKeys ...string) int64 {
+func Int64(in any, debugKeys ...string) int64 {
 	i64, err := Int64Err(in, debugKeys...)
 	if err != nil {
 		return int64(0)
@@ -35,7 +35,7 @@ func Int64(in interface{}, debugKeys ...string) int64 {
 	return i64
 }
 
-func Int32Err(in interface{}, debugKeys ...string) (int32, error) {
+func Int32Err(in any, debugKeys ...string) (int32, error) {
 	i64, err := Int64Err(in, debugKeys...)
 	if err != nil {
 		return int32(0), err
@@ -48,8 +48,7 @@ func Int32Err(in interface{}, debugKeys ...string) (int32, error) {
 	return int32(i64), err
 }
 
-func Int64Err(in interface{}, debugKeys ...string) (int64, error) {
-
+func Int64Err(in any, debugKeys ...string) (int64, error) {
 	if in == nil {
 		return int64(0), fmt.Errorf("Int64Err null value for '%+v' [keys: %+v]", in, debugKeys)
 	}
@@ -95,7 +94,7 @@ func Int64Err(in interface{}, debugKeys ...string) (int64, error) {
 	return int64(0), fmt.Errorf("Int64Err wrong value for '%+v' [keys: %+v]", in, debugKeys)
 }
 
-func ListOfInt32Err(in interface{}, checkLen bool, debugKeys ...string) ([]int32, error) {
+func ListOfInt32Err(in any, checkLen bool, debugKeys ...string) ([]int32, error) {
 
 	debugKey := ""
 	if len(debugKeys) > 0 {
@@ -118,7 +117,7 @@ func ListOfInt32Err(in interface{}, checkLen bool, debugKeys ...string) ([]int32
 	return out, nil
 }
 
-func ListOfInt64Err(in interface{}, checkLen bool, debugKeys ...string) ([]int64, error) {
+func ListOfInt64Err(in any, checkLen bool, debugKeys ...string) ([]int64, error) {
 
 	debugKey := ""
 	if len(debugKeys) > 0 {

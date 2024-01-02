@@ -7,7 +7,7 @@ import (
 )
 
 func TestMapIteratorEmpty(t *testing.T) {
-	iter, err := convert.MapIterator(map[string]interface{}{})
+	iter, err := convert.MapIterator(map[string]any{})
 	Nil2(t, err)
 	EqualBool(t, iter.HasNext(), false)
 	a, b := iter.Next()
@@ -37,7 +37,7 @@ func TestMapIteratorEmpty(t *testing.T) {
 }
 
 func TestMapIteratorLength(t *testing.T) {
-	_, err := convert.MapIterator(map[string]interface{}{}, true)
+	_, err := convert.MapIterator(map[string]any{}, true)
 	NotNil2(t, err)
 
 	_, err = convert.MapIterator(map[int][]int32{}, true)
@@ -45,7 +45,7 @@ func TestMapIteratorLength(t *testing.T) {
 }
 
 func TestMapIteratorRun_1(t *testing.T) {
-	data := map[string]interface{}{
+	data := map[string]any{
 		"a": "a",
 		"b": nil,
 		"c": 1,

@@ -7,7 +7,7 @@ import (
 	"strconv"
 )
 
-func Float64(in interface{}, debugKeys ...string) float64 {
+func Float64(in any, debugKeys ...string) float64 {
 	f64, err := Float64Err(in, debugKeys...)
 	if err != nil {
 		return 0
@@ -15,7 +15,7 @@ func Float64(in interface{}, debugKeys ...string) float64 {
 	return f64
 }
 
-func Float32(in interface{}, debugKeys ...string) float32 {
+func Float32(in any, debugKeys ...string) float32 {
 	f, err := Float32Err(in, debugKeys...)
 	if err != nil {
 		return 0
@@ -23,7 +23,7 @@ func Float32(in interface{}, debugKeys ...string) float32 {
 	return f
 }
 
-func Float64Err(in interface{}, debugKeys ...string) (float64, error) {
+func Float64Err(in any, debugKeys ...string) (float64, error) {
 	f, err := BaseFloat64Err(in, debugKeys...)
 	if err != nil {
 		return 0, err
@@ -36,7 +36,7 @@ func Float64Err(in interface{}, debugKeys ...string) (float64, error) {
 	return f, nil
 }
 
-func BaseFloat64Err(in interface{}, debugKeys ...string) (float64, error) {
+func BaseFloat64Err(in any, debugKeys ...string) (float64, error) {
 
 	if in == nil {
 		return .0, fmt.Errorf("Float64Err null value for '%+v' [keys: %+v]", in, debugKeys)
@@ -91,7 +91,7 @@ func BaseFloat64Err(in interface{}, debugKeys ...string) (float64, error) {
 	return 0, fmt.Errorf("Float64Err wrong unreachable value for '%+v' [keys: %+v]", in, debugKeys)
 }
 
-func Float32Err(in interface{}, debugKeys ...string) (float32, error) {
+func Float32Err(in any, debugKeys ...string) (float32, error) {
 
 	if in == nil {
 		return .0, fmt.Errorf("Float32Err null value for '%+v' [keys: %+v]", in, debugKeys)
