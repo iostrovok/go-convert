@@ -18,6 +18,13 @@ func Bool(in any) bool {
 		return fmt.Sprintf("%d", in) != "0"
 	case float32, float64:
 		return fmt.Sprintf("%.10f", in) != "0.0000000000"
+	case []byte:
+		switch strings.ToLower(string(in.([]byte))) {
+		case "", "false", "f", "0":
+			return false
+		default:
+			return true
+		}
 	case string:
 		switch strings.ToLower(fmt.Sprintf("%s", in)) {
 		case "", "false", "f", "0":

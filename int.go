@@ -87,6 +87,8 @@ func Int64Err(in any, debugKeys ...string) (int64, error) {
 		return int64(in.(int)), nil
 	case int32:
 		return int64(in.(int32)), nil
+	case []byte:
+		return strconv.ParseInt(string(in.([]byte)), 10, 64)
 	case string:
 		return strconv.ParseInt(in.(string), 10, 64)
 	}
