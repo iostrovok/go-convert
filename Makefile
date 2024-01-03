@@ -9,9 +9,7 @@ GODEBUG:=GODEBUG=gocacheverify=1
 ##
 
 ## default:
-all: mod deps fmt lint test
-
-all-deps: mod deps
+all: mod test
 
 deps:
 	@echo "======================================================================"
@@ -22,34 +20,28 @@ deps:
 test: tests
 
 tests:
-	@echo "Run test ./..."
-	@$(DIR) $(GODEBUG) go test ./...
+	@echo "Run test -race ./..."
+	@$(DIR) $(GODEBUG) go test -race ./...
 
 tests-cover:
 	@echo "Run test  -cover -race -coverprofile=./coverage.out ./..."
-	@$(DIR) $(GODEBUG) go test  -cover -race -coverprofile=./coverage.out ./...
+	@$(DIR) $(GODEBUG) go test -cover -race -coverprofile=./coverage.out ./...
 	go tool cover -html=./coverage.out -o ./coverage.html
 	rm ./coverage.out
-
-lint:
-	@echo "======================================================================"
-	@echo "Run golint..."
-	$(GOBIN)golint ./...
 
 fmt:
 	@echo "======================================================================"
 	@echo "Run go fmt..."
 	@go fmt ./...
 
-mod:
-	@echo "======================================================================"
-	@echo "Run MOD"
-	GO111MODULE=on GONOSUMDB="*" GOPROXY=direct go mod verify
-	GO111MODULE=on GONOSUMDB="*" GOPROXY=direct go mod tidy
-	GO111MODULE=on GONOSUMDB="*" GOPROXY=direct go mod vendor
-	GO111MODULE=on GONOSUMDB="*" GOPROXY=direct go mod download
-	GO111MODULE=on GONOSUMDB="*" GOPROXY=direct go mod verify
-
 clean_cache:
 	@go clean -cache
 	@go clean -testcache
+
+mod-action-%:
+	@echo "Run go mod ${*}...."
+	GO111MODULE=on go mod $*
+	@echo "Done go mod  ${*}"
+
+mod: mod-action-verify mod-action-tidy mod-action-vendor mod-action-download mod-action-verify ## Download all dependencies
+	@echo "All installed"

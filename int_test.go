@@ -2,96 +2,101 @@ package convert_test
 
 import (
 	"math"
-
-	. "github.com/iostrovok/check"
+	"testing"
 
 	"github.com/iostrovok/go-convert"
 )
 
-func (s *testSuite) TestInt64(c *C) {
-	c.Assert(convert.Int64(""), Equals, int64(0))
-	c.Assert(convert.Int64("3049"), Equals, int64(3049))
-	c.Assert(convert.Int64([]byte("3049")), Equals, int64(3049))
-	c.Assert(convert.Int64(int32(3049)), Equals, int64(3049))
-	c.Assert(convert.Int64(int64(3049)), Equals, int64(3049))
-	c.Assert(convert.Int64(3049), Equals, int64(3049))
-	c.Assert(convert.Int64(3049.24343), Equals, int64(3049))
+func TestInt64(t *testing.T) {
+	Equal(t, convert.Int64(""), int64(0))
+	Equal(t, convert.Int64("3049"), int64(3049))
+	Equal(t, convert.Int64(int32(3049)), int64(3049))
+	Equal(t, convert.Int64(int64(3049)), int64(3049))
+	Equal(t, convert.Int64(3049), int64(3049))
+	Equal(t, convert.Int64(3049.24343), int64(3049))
 }
 
-func (s *testSuite) TestInt32(c *C) {
-	c.Assert(convert.Int32(""), Equals, int32(0))
-	c.Assert(convert.Int32("3049"), Equals, int32(3049))
-	c.Assert(convert.Int32([]byte("3049")), Equals, int32(3049))
-	c.Assert(convert.Int32(int32(3049)), Equals, int32(3049))
-	c.Assert(convert.Int32(int64(3049)), Equals, int32(3049))
-	c.Assert(convert.Int32(3049), Equals, int32(3049))
-	c.Assert(convert.Int32(3049.24343), Equals, int32(3049))
+func TestInt32(t *testing.T) {
+	Equal(t, convert.Int32(""), int32(0))
+	Equal(t, convert.Int32("3049"), int32(3049))
+	Equal(t, convert.Int32(int32(3049)), int32(3049))
+	Equal(t, convert.Int32(int64(3049)), int32(3049))
+	Equal(t, convert.Int32(3049), int32(3049))
+	Equal(t, convert.Int32(3049.24343), int32(3049))
 }
 
-func (s *testSuite) TestListOfInt64Err(c *C) {
-	res, err := convert.ListOfInt64Err([]interface{}{
+func TestListOfInt64Err(t *testing.T) {
+	res, err := convert.ListOfInt64Err([]any{
 		"1", 12, 45, 123412323, -1, 0,
 	}, false)
 
-	c.Assert(err, IsNil)
-	c.Assert(res, DeepEquals, []int64{1, 12, 45, 123412323, -1, 0})
+	Nil2(t, err)
+	check := []int64{1, 12, 45, 123412323, -1, 0}
+	Equal(t, len(res), len(check))
+	for i, v := range check {
+		Equal(t, res[i], v)
+	}
 }
 
-func (s *testSuite) TestListOfInt64Err2(c *C) {
-	_, err := convert.ListOfInt64Err([]interface{}{
+func TestListOfInt64Err2(t *testing.T) {
+	_, err := convert.ListOfInt64Err([]any{
 		"1", 12, 45, nil, -1, 0,
 	}, false)
-	c.Assert(err, NotNil)
+	NotNil2(t, err)
 
-	_, err = convert.ListOfInt64Err([]interface{}{
+	_, err = convert.ListOfInt64Err([]any{
 		"", 12, 45, -1, 0,
 	}, false)
-	c.Assert(err, NotNil)
+	NotNil2(t, err)
 }
 
-func (s *testSuite) TestListOfInt64ErrEmpty(c *C) {
-	_, err := convert.ListOfInt64Err([]interface{}{}, false)
-	c.Assert(err, IsNil)
+func TestListOfInt64ErrEmpty(t *testing.T) {
+	_, err := convert.ListOfInt64Err([]any{}, false)
+	Nil2(t, err)
 
-	_, err = convert.ListOfInt64Err([]interface{}{}, true)
-	c.Assert(err, NotNil)
+	_, err = convert.ListOfInt64Err([]any{}, true)
+	NotNil2(t, err)
 }
 
-func (s *testSuite) TestListOfInt32Err(c *C) {
-	res, err := convert.ListOfInt32Err([]interface{}{
+func TestListOfInt32Err(t *testing.T) {
+	res, err := convert.ListOfInt32Err([]any{
 		"1", 12, 45, 123412323, -1, 0,
 	}, false)
 
-	c.Assert(err, IsNil)
-	c.Assert(res, DeepEquals, []int32{1, 12, 45, 123412323, -1, 0})
+	Nil2(t, err)
+	check := []int32{1, 12, 45, 123412323, -1, 0}
+	Equal(t, len(res), len(check))
+	for i, v := range check {
+		Equal(t, res[i], v)
+	}
 }
 
-func (s *testSuite) TestListOfInt32Err2(c *C) {
-	_, err := convert.ListOfInt32Err([]interface{}{
+func TestListOfInt32Err2(t *testing.T) {
+	_, err := convert.ListOfInt32Err([]any{
 		"1", 12, 45, nil, -1, 0,
 	}, false)
-	c.Assert(err, NotNil)
+	NotNil2(t, err)
 
-	_, err = convert.ListOfInt32Err([]interface{}{
+	_, err = convert.ListOfInt32Err([]any{
 		"", 12, 45, -1, 0,
 	}, false)
-	c.Assert(err, NotNil)
+	NotNil2(t, err)
 
-	_, err = convert.ListOfInt32Err([]interface{}{
+	_, err = convert.ListOfInt32Err([]any{
 		"1", 12, 45, 123412323, -1, 0, math.MaxInt64,
 	}, false)
-	c.Assert(err, NotNil)
+	NotNil2(t, err)
 
-	_, err = convert.ListOfInt32Err([]interface{}{
+	_, err = convert.ListOfInt32Err([]any{
 		"1", 12, 45, 123412323, -1, 0, math.MinInt64,
 	}, false)
-	c.Assert(err, NotNil)
+	NotNil2(t, err)
 }
 
-func (s *testSuite) TestListOfInt32ErrEmpty(c *C) {
-	_, err := convert.ListOfInt32Err([]interface{}{}, false)
-	c.Assert(err, IsNil)
+func TestListOfInt32ErrEmpty(t *testing.T) {
+	_, err := convert.ListOfInt32Err([]any{}, false)
+	Nil2(t, err)
 
-	_, err = convert.ListOfInt32Err([]interface{}{}, true)
-	c.Assert(err, NotNil)
+	_, err = convert.ListOfInt32Err([]any{}, true)
+	NotNil2(t, err)
 }

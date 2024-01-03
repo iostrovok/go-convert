@@ -1,68 +1,80 @@
 package convert_test
 
 import (
-	. "github.com/iostrovok/check"
+	"testing"
 
 	"github.com/iostrovok/go-convert"
 )
 
-func (s *testSuite) TestBool(c *C) {
+func TestBool_new(t *testing.T) {
+	EqualBool(t, convert.Bool(1), true)
+	EqualBool(t, convert.Bool(1), true)
+	EqualBool(t, convert.Bool("1"), true)
+	EqualBool(t, convert.Bool("-1"), true)
+	EqualBool(t, convert.Bool(true), true)
+	EqualBool(t, convert.Bool("True"), true)
+	EqualBool(t, convert.Bool("true"), true)
+	EqualBool(t, convert.Bool("t"), true)
+	EqualBool(t, convert.Bool(0.1), true)
 
-	c.Assert(convert.Bool(1), Equals, true)
-	c.Assert(convert.Bool("1"), Equals, true)
-	c.Assert(convert.Bool([]byte("1")), Equals, true)
-	c.Assert(convert.Bool("-1"), Equals, true)
-	c.Assert(convert.Bool([]byte("-1")), Equals, true)
-	c.Assert(convert.Bool(true), Equals, true)
-	c.Assert(convert.Bool("True"), Equals, true)
-	c.Assert(convert.Bool([]byte("True")), Equals, true)
-	c.Assert(convert.Bool([]byte("true")), Equals, true)
-	c.Assert(convert.Bool("true"), Equals, true)
-	c.Assert(convert.Bool("t"), Equals, true)
-	c.Assert(convert.Bool(0.1), Equals, true)
-
-	c.Assert(convert.Bool("0"), Equals, false)
-	c.Assert(convert.Bool([]byte("0")), Equals, false)
-	c.Assert(convert.Bool(false), Equals, false)
-	c.Assert(convert.Bool(""), Equals, false)
-	c.Assert(convert.Bool([]byte("")), Equals, false)
-	c.Assert(convert.Bool("false"), Equals, false)
-	c.Assert(convert.Bool([]byte("false")), Equals, false)
-	c.Assert(convert.Bool([]byte("False")), Equals, false)
-	c.Assert(convert.Bool("False"), Equals, false)
-	c.Assert(convert.Bool("f"), Equals, false)
-	c.Assert(convert.Bool(0), Equals, false)
-	c.Assert(convert.Bool(0.0), Equals, false)
+	EqualBool(t, convert.Bool("0"), false)
+	EqualBool(t, convert.Bool(false), false)
+	EqualBool(t, convert.Bool(""), false)
+	EqualBool(t, convert.Bool("false"), false)
+	EqualBool(t, convert.Bool("False"), false)
+	EqualBool(t, convert.Bool("f"), false)
+	EqualBool(t, convert.Bool(0), false)
+	EqualBool(t, convert.Bool(0.0), false)
 }
 
-func (s *testSuite) TestBoolErr(c *C) {
+func TestBool(t *testing.T) {
+	EqualBool(t, convert.Bool(1), true)
+	EqualBool(t, convert.Bool("1"), true)
+	EqualBool(t, convert.Bool("-1"), true)
+	EqualBool(t, convert.Bool(true), true)
+	EqualBool(t, convert.Bool("True"), true)
+	EqualBool(t, convert.Bool("true"), true)
+	EqualBool(t, convert.Bool("t"), true)
+	EqualBool(t, convert.Bool(0.1), true)
+
+	EqualBool(t, convert.Bool("0"), false)
+	EqualBool(t, convert.Bool(false), false)
+	EqualBool(t, convert.Bool(""), false)
+	EqualBool(t, convert.Bool("false"), false)
+	EqualBool(t, convert.Bool("False"), false)
+	EqualBool(t, convert.Bool("f"), false)
+	EqualBool(t, convert.Bool(0), false)
+	EqualBool(t, convert.Bool(0.0), false)
+}
+
+func TestBoolErr(t *testing.T) {
 	a, err := convert.BoolErr("1")
-	c.Assert(err, IsNil)
-	c.Assert(a, Equals, true)
+	Nil2(t, err)
+	EqualBool(t, a, true)
 }
 
-func (s *testSuite) TestBool_ArrayMap(c *C) {
-	c.Assert(convert.Bool([]interface{}{}), Equals, false)
-	c.Assert(convert.Bool(map[string]interface{}{}), Equals, false)
-	c.Assert(convert.Bool(map[int]interface{}{}), Equals, false)
+func TestBool_ArrayMap(t *testing.T) {
+	EqualBool(t, convert.Bool([]any{}), false)
+	EqualBool(t, convert.Bool(map[string]any{}), false)
+	EqualBool(t, convert.Bool(map[int]any{}), false)
 
-	c.Assert(convert.Bool([]string{}), Equals, false)
-	c.Assert(convert.Bool(map[string]string{}), Equals, false)
-	c.Assert(convert.Bool(map[int]string{}), Equals, false)
+	EqualBool(t, convert.Bool([]string{}), false)
+	EqualBool(t, convert.Bool(map[string]string{}), false)
+	EqualBool(t, convert.Bool(map[int]string{}), false)
 
-	c.Assert(convert.Bool([]int{}), Equals, false)
-	c.Assert(convert.Bool(map[string]int{}), Equals, false)
-	c.Assert(convert.Bool(map[int]int{}), Equals, false)
+	EqualBool(t, convert.Bool([]int{}), false)
+	EqualBool(t, convert.Bool(map[string]int{}), false)
+	EqualBool(t, convert.Bool(map[int]int{}), false)
 
-	c.Assert(convert.Bool([]interface{}{1}), Equals, true)
-	c.Assert(convert.Bool(map[string]interface{}{"1": 1}), Equals, true)
-	c.Assert(convert.Bool(map[int]interface{}{1: "asdasdasd"}), Equals, true)
+	EqualBool(t, convert.Bool([]any{1}), true)
+	EqualBool(t, convert.Bool(map[string]any{"1": 1}), true)
+	EqualBool(t, convert.Bool(map[int]any{1: "asdasdasd"}), true)
 
-	c.Assert(convert.Bool([]string{"1"}), Equals, true)
-	c.Assert(convert.Bool(map[string]string{"1": "1"}), Equals, true)
-	c.Assert(convert.Bool(map[int]string{1: "1"}), Equals, true)
+	EqualBool(t, convert.Bool([]string{"1"}), true)
+	EqualBool(t, convert.Bool(map[string]string{"1": "1"}), true)
+	EqualBool(t, convert.Bool(map[int]string{1: "1"}), true)
 
-	c.Assert(convert.Bool([]int{1}), Equals, true)
-	c.Assert(convert.Bool(map[string]int{"1": 1}), Equals, true)
-	c.Assert(convert.Bool(map[int]int{1: 1}), Equals, true)
+	EqualBool(t, convert.Bool([]int{1}), true)
+	EqualBool(t, convert.Bool(map[string]int{"1": 1}), true)
+	EqualBool(t, convert.Bool(map[int]int{1: 1}), true)
 }

@@ -3,19 +3,18 @@ package convert_test
 import (
 	"math"
 	"reflect"
-
-	. "github.com/iostrovok/check"
+	"testing"
 
 	"github.com/iostrovok/go-convert"
 )
 
 type oneFloat64Test struct {
-	val     interface{}
+	val     any
 	result  float64
 	isError bool
 }
 
-func (s *testSuite) TestFloat64Err(c *C) {
+func TestFloat64Err(t *testing.T) {
 	testList := []oneFloat64Test{
 		{"", 0, true},
 		{"wqeqwe", 0, true},
@@ -54,15 +53,15 @@ func (s *testSuite) TestFloat64Err(c *C) {
 	for _, one := range testList {
 		f64, err := convert.BaseFloat64Err(one.val)
 		if one.isError {
-			c.Assert(err, NotNil)
+			NotNil2(t, err)
 		} else {
-			c.Assert(err, IsNil)
-			c.Assert(f64, Equals, one.result)
+			Nil2(t, err)
+			Equal(t, f64, one.result)
 		}
 	}
 }
 
-func (s *testSuite) TestFloat64(c *C) {
+func TestFloat64(t *testing.T) {
 	testList := []oneFloat64Test{
 		{"", 0, false},
 		{nil, 0, false},
@@ -80,17 +79,17 @@ func (s *testSuite) TestFloat64(c *C) {
 	}
 
 	for _, one := range testList {
-		c.Assert(convert.Float64(one.val), Equals, one.result)
+		Equal(t, convert.Float64(one.val), one.result)
 	}
 }
 
 type oneFloat32Test struct {
-	val     interface{}
+	val     any
 	result  float32
 	isError bool
 }
 
-func (s *testSuite) TestFloat32Err(c *C) {
+func TestFloat32Err(t *testing.T) {
 
 	testList := []oneFloat32Test{
 		{math.MaxFloat64, 0, true},
@@ -109,16 +108,15 @@ func (s *testSuite) TestFloat32Err(c *C) {
 	for _, one := range testList {
 		f32, err := convert.Float32Err(one.val)
 		if one.isError {
-			c.Assert(err, NotNil)
+			NotNil2(t, err)
 		} else {
-			c.Assert(err, IsNil)
-			c.Assert(f32, Equals, one.result)
+			Nil2(t, err)
+			Equal(t, f32, one.result)
 		}
 	}
 }
 
-func (s *testSuite) TestFloat32(c *C) {
-
+func TestFloat32(t *testing.T) {
 	testList := []oneFloat32Test{
 		{"", 0, false},
 		{"wqeqwe", 0, true},
@@ -151,6 +149,6 @@ func (s *testSuite) TestFloat32(c *C) {
 	}
 
 	for _, one := range testList {
-		c.Assert(convert.Float32(one.val), Equals, one.result)
+		Equal(t, convert.Float32(one.val), one.result)
 	}
 }
