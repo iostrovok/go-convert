@@ -15,7 +15,7 @@ type MapIt struct {
 	i, count int
 }
 
-func MapIterator(i interface{}, checkLen ...bool) (*MapIt, error) {
+func MapIterator(i any, checkLen ...bool) (*MapIt, error) {
 	item := reflect.ValueOf(i)
 	if item.Kind() != reflect.Map {
 		return nil, fmt.Errorf("input value is not a map")
@@ -32,7 +32,7 @@ func MapIterator(i interface{}, checkLen ...bool) (*MapIt, error) {
 	}, nil
 }
 
-func (it *MapIt) Next() (interface{}, interface{}) {
+func (it *MapIt) Next() (any, any) {
 
 	for it.i < it.count {
 		key := it.keys[it.i]

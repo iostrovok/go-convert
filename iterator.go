@@ -14,7 +14,7 @@ type It struct {
 	i, count int
 }
 
-func Iterator(i interface{}, checkLen ...bool) (*It, error) {
+func Iterator(i any, checkLen ...bool) (*It, error) {
 	items := reflect.ValueOf(i)
 	if items.Kind() != reflect.Slice {
 		return nil, fmt.Errorf("data is not a list/slice")
@@ -30,7 +30,7 @@ func Iterator(i interface{}, checkLen ...bool) (*It, error) {
 	}, nil
 }
 
-func (it *It) NextNotNil() interface{} {
+func (it *It) NextNotNil() any {
 
 	for it.i < it.count {
 		out := it.items.Index(it.i).Interface()
@@ -43,20 +43,20 @@ func (it *It) NextNotNil() interface{} {
 	return nil
 }
 
-func (it *It) NextNotNilMapString() map[string]interface{} {
-
+func (it *It) NextNotNilMapString() (map[string]any, bool) {
 	for {
 		i := it.NextNotNil()
 		if i == nil {
-			return nil
+			return nil, false
 		}
+
 		out, find := CheckMapStringType(i)
 		if find {
-			return out
+			return out, true
 		}
 	}
 
-	return nil
+	return nil, false
 }
 
 func (it *It) NextNotEmptyString() string {
@@ -86,11 +86,11 @@ func (it *It) Len() int {
 	return it.count
 }
 
-func CheckMapStringType(t interface{}) (map[string]interface{}, bool) {
+func CheckMapStringType(t any) (map[string]any, bool) {
 
 	switch t.(type) {
-	case map[string]interface{}:
-		return t.(map[string]interface{}), true
+	case map[string]any:
+		return t.(map[string]any), true
 	}
 
 	return nil, false
