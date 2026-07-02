@@ -1,6 +1,6 @@
 # go-convert
 
-A lightweight, zero-dependency (except `github.com/pkg/errors`) Go library for safely converting `any` (`interface{}`) values to standard Go types.  
+A lightweight, zero-dependency Go library for safely converting `any` (`interface{}`) values to standard Go types.  
 All conversions handle `nil`, type mismatches, and out-of-range values gracefully — returning a sensible zero value or an error instead of panicking.
 
 ## Installation
@@ -240,9 +240,8 @@ Use `debugKeys` to annotate where in your data structure the value came from —
 
 ## Requirements
 
-- Go **1.22+**
-- [`github.com/pkg/errors`](https://github.com/pkg/errors) v0.9.1
+- Go **1.22+** and over
 
 ## License
 
-See [LICENSE](LICENSE).
+See [MIT LICENSE](LICENSE).

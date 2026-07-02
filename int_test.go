@@ -14,6 +14,7 @@ var testCases = []any{
 func TestInt64(t *testing.T) {
 	Equal(t, convert.Int64(""), int64(0))
 	Equal(t, convert.Int64("wqeqwe"), int64(0))
+	Equal(t, convert.Int64(true), int64(1))
 	for _, v := range testCases {
 		Equal(t, convert.Int64(v), int64(3049))
 	}
@@ -22,6 +23,7 @@ func TestInt64(t *testing.T) {
 func TestInt32(t *testing.T) {
 	Equal(t, convert.Int32(""), int32(0))
 	Equal(t, convert.Int32("wqeqwe"), int32(0))
+	Equal(t, convert.Int32(true), int32(1))
 	for _, v := range testCases {
 		Equal(t, convert.Int32(v), int32(3049))
 	}
