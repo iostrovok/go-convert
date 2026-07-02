@@ -1,19 +1,19 @@
 package convert
 
-/*
-	Iterator over slice of interfaces
-*/
-
 import (
 	"fmt"
 	"reflect"
 )
 
+// It is a forward-only iterator over any slice value.
 type It struct {
 	items    reflect.Value
 	i, count int
 }
 
+// Iterator wraps i in an It iterator. i must be a slice; otherwise an error is
+// returned. If checkLen is provided and true, an error is returned for an empty
+// slice as well.
 func Iterator(i any, checkLen ...bool) (*It, error) {
 	items := reflect.ValueOf(i)
 	if items.Kind() != reflect.Slice {
@@ -30,6 +30,8 @@ func Iterator(i any, checkLen ...bool) (*It, error) {
 	}, nil
 }
 
+// NextNotNil advances the iterator and returns the next non-nil element.
+// Returns nil when no more non-nil elements remain.
 func (it *It) NextNotNil() any {
 
 	for it.i < it.count {
@@ -43,6 +45,9 @@ func (it *It) NextNotNil() any {
 	return nil
 }
 
+// NextNotNilMapString advances the iterator and returns the next element that
+// is a non-nil map[string]any. Elements of other types are skipped.
+// Returns nil, false when the iterator is exhausted.
 func (it *It) NextNotNilMapString() (map[string]any, bool) {
 	for {
 		i := it.NextNotNil()
@@ -59,8 +64,10 @@ func (it *It) NextNotNilMapString() (map[string]any, bool) {
 	return nil, false
 }
 
+// NextNotEmptyString advances the iterator and returns the next element that
+// is a non-empty string. Non-string and empty-string elements are skipped.
+// Returns "" when the iterator is exhausted.
 func (it *It) NextNotEmptyString() string {
-
 	out := ""
 	for {
 		s := it.NextNotNil()
@@ -82,10 +89,13 @@ func (it *It) NextNotEmptyString() string {
 	return ""
 }
 
+// Len returns the total number of elements in the underlying slice.
 func (it *It) Len() int {
 	return it.count
 }
 
+// CheckMapStringType asserts that t is of type map[string]any.
+// Returns the map and true on success, or nil and false otherwise.
 func CheckMapStringType(t any) (map[string]any, bool) {
 
 	switch t.(type) {

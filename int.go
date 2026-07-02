@@ -1,15 +1,13 @@
 package convert
 
-/*
-	It's long code but quick!
-*/
-
 import (
 	"fmt"
 	"math"
 	"strconv"
 )
 
+// Int32 converts in to an int32. Returns 0 on error or if the value overflows int32.
+// Optional debugKeys are embedded in error messages for tracing.
 func Int32(in any, debugKeys ...string) int32 {
 	i64, err := Int64Err(in, debugKeys...)
 	if err != nil || i64 > math.MaxInt32 || i64 < math.MinInt32 {
@@ -19,6 +17,8 @@ func Int32(in any, debugKeys ...string) int32 {
 	return int32(i64)
 }
 
+// Int converts in to an int. Returns 0 on error.
+// Optional debugKeys are embedded in error messages for tracing.
 func Int(in any, debugKeys ...string) int {
 	i64, err := Int64Err(in, debugKeys...)
 	if err != nil {
@@ -27,6 +27,8 @@ func Int(in any, debugKeys ...string) int {
 	return int(i64)
 }
 
+// Int64 converts in to an int64. Returns 0 on error.
+// Optional debugKeys are embedded in error messages for tracing.
 func Int64(in any, debugKeys ...string) int64 {
 	i64, err := Int64Err(in, debugKeys...)
 	if err != nil {
@@ -35,6 +37,9 @@ func Int64(in any, debugKeys ...string) int64 {
 	return i64
 }
 
+// Int32Err converts in to an int32. Returns an error if the conversion fails
+// or if the value overflows the int32 range (math.MinInt32…math.MaxInt32).
+// Optional debugKeys are embedded in error messages for tracing.
 func Int32Err(in any, debugKeys ...string) (int32, error) {
 	i64, err := Int64Err(in, debugKeys...)
 	if err != nil {
@@ -48,6 +53,10 @@ func Int32Err(in any, debugKeys ...string) (int32, error) {
 	return int32(i64), err
 }
 
+// Int64Err converts in to an int64. Accepted types: all integer and float types,
+// bool (true→1, false→0), string, and []byte.
+// Returns an error for nil or unconvertible values.
+// Optional debugKeys are embedded in error messages for tracing.
 func Int64Err(in any, debugKeys ...string) (int64, error) {
 	if in == nil {
 		return int64(0), fmt.Errorf("Int64Err null value for '%+v' [keys: %+v]", in, debugKeys)
@@ -96,6 +105,10 @@ func Int64Err(in any, debugKeys ...string) (int64, error) {
 	return int64(0), fmt.Errorf("Int64Err wrong value for '%+v' [keys: %+v]", in, debugKeys)
 }
 
+// ListOfInt32Err converts in (which must be a slice) into a []int32.
+// Each element is converted via Int64Err and then range-checked against int32 bounds.
+// If checkLen is true and the input slice is empty, an error is returned.
+// Optional debugKeys are embedded in error messages for tracing.
 func ListOfInt32Err(in any, checkLen bool, debugKeys ...string) ([]int32, error) {
 
 	debugKey := ""
@@ -119,6 +132,10 @@ func ListOfInt32Err(in any, checkLen bool, debugKeys ...string) ([]int32, error)
 	return out, nil
 }
 
+// ListOfInt64Err converts in (which must be a slice) into a []int64.
+// Each element is converted via Int64Err.
+// If checkLen is true and the input slice is empty, an error is returned.
+// Optional debugKeys are embedded in error messages for tracing.
 func ListOfInt64Err(in any, checkLen bool, debugKeys ...string) ([]int64, error) {
 
 	debugKey := ""

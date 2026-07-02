@@ -7,22 +7,24 @@ import (
 	"github.com/iostrovok/go-convert"
 )
 
+var testCases = []any{
+	"3049", int32(3049), int64(3049), 3049, float32(3049.24343), float64(3049.24343),
+}
+
 func TestInt64(t *testing.T) {
 	Equal(t, convert.Int64(""), int64(0))
-	Equal(t, convert.Int64("3049"), int64(3049))
-	Equal(t, convert.Int64(int32(3049)), int64(3049))
-	Equal(t, convert.Int64(int64(3049)), int64(3049))
-	Equal(t, convert.Int64(3049), int64(3049))
-	Equal(t, convert.Int64(3049.24343), int64(3049))
+	Equal(t, convert.Int64("wqeqwe"), int64(0))
+	for _, v := range testCases {
+		Equal(t, convert.Int64(v), int64(3049))
+	}
 }
 
 func TestInt32(t *testing.T) {
 	Equal(t, convert.Int32(""), int32(0))
-	Equal(t, convert.Int32("3049"), int32(3049))
-	Equal(t, convert.Int32(int32(3049)), int32(3049))
-	Equal(t, convert.Int32(int64(3049)), int32(3049))
-	Equal(t, convert.Int32(3049), int32(3049))
-	Equal(t, convert.Int32(3049.24343), int32(3049))
+	Equal(t, convert.Int32("wqeqwe"), int32(0))
+	for _, v := range testCases {
+		Equal(t, convert.Int32(v), int32(3049))
+	}
 }
 
 func TestListOfInt64Err(t *testing.T) {

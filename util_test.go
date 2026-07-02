@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"reflect"
 	"testing"
-
-	"github.com/pkg/errors"
 )
 
 func Fatal(t *testing.T, err error) {
@@ -17,30 +15,30 @@ func Fatal(t *testing.T, err error) {
 
 func NotNil2(t *testing.T, err error) {
 	if err == nil {
-		Fatal(t, errors.Errorf("expected not nil errors"))
+		Fatal(t, fmt.Errorf("expected not nil errors"))
 	}
 }
 
 func Nil2(t *testing.T, a any) {
 	if a != nil {
-		Fatal(t, errors.Errorf("not nil"))
+		Fatal(t, fmt.Errorf("not nil"))
 	}
 }
 
 func Equal(t *testing.T, obtained, expected any) {
 	if !isType(obtained, expected) {
-		Fatal(t, errors.Errorf("wrong types"))
+		Fatal(t, fmt.Errorf("wrong types"))
 	}
 
 	// Simple comparing. It is enough for our goals.
 	if fmt.Sprintf("%v", obtained) != fmt.Sprintf("%v", expected) {
-		Fatal(t, errors.Errorf("wrong values: %v != %v", obtained, expected))
+		Fatal(t, fmt.Errorf("wrong values: %v != %v", obtained, expected))
 	}
 }
 
 func EqualBool(t *testing.T, obtained, expected bool) {
 	if obtained != expected {
-		Fatal(t, errors.Errorf("wrong values: %t != %t", obtained, expected))
+		Fatal(t, fmt.Errorf("wrong values: %t != %t", obtained, expected))
 	}
 }
 
@@ -50,7 +48,7 @@ func isType(a, b any) bool {
 
 func EqualStringsArray(t *testing.T, obtained, check []string) {
 	if len(obtained) != len(check) {
-		err := errors.Errorf("wrong length in EqualStringsArray")
+		err := fmt.Errorf("wrong length in EqualStringsArray")
 		Fatal(t, err)
 	}
 
