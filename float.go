@@ -7,6 +7,8 @@ import (
 	"strconv"
 )
 
+// Float64 converts in to a float64. Returns 0 on error.
+// Optional debugKeys are embedded in error messages for tracing.
 func Float64(in any, debugKeys ...string) float64 {
 	f64, err := Float64Err(in, debugKeys...)
 	if err != nil {
@@ -15,6 +17,8 @@ func Float64(in any, debugKeys ...string) float64 {
 	return f64
 }
 
+// Float32 converts in to a float32. Returns 0 on error.
+// Optional debugKeys are embedded in error messages for tracing.
 func Float32(in any, debugKeys ...string) float32 {
 	f, err := Float32Err(in, debugKeys...)
 	if err != nil {
@@ -23,6 +27,9 @@ func Float32(in any, debugKeys ...string) float32 {
 	return f
 }
 
+// Float64Err converts in to a float64. It delegates to BaseFloat64Err and
+// additionally rejects ±Inf results, returning 0 in that case.
+// Optional debugKeys are embedded in error messages for tracing.
 func Float64Err(in any, debugKeys ...string) (float64, error) {
 	f, err := BaseFloat64Err(in, debugKeys...)
 	if err != nil {
@@ -36,6 +43,10 @@ func Float64Err(in any, debugKeys ...string) (float64, error) {
 	return f, nil
 }
 
+// BaseFloat64Err converts in to a float64 without filtering ±Inf.
+// Accepted types: all numeric types, bool (true→1.0, false→0.0), string, and []byte.
+// Returns an error for nil or unconvertible values.
+// Optional debugKeys are embedded in error messages for tracing.
 func BaseFloat64Err(in any, debugKeys ...string) (float64, error) {
 
 	if in == nil {
@@ -97,6 +108,9 @@ func BaseFloat64Err(in any, debugKeys ...string) (float64, error) {
 	return 0, fmt.Errorf("Float64Err wrong unreachable value for '%+v' [keys: %+v]", in, debugKeys)
 }
 
+// Float32Err converts in to a float32. Returns an error if the conversion fails
+// or if a float64 input value exceeds ±math.MaxFloat32.
+// Optional debugKeys are embedded in error messages for tracing.
 func Float32Err(in any, debugKeys ...string) (float32, error) {
 
 	if in == nil {

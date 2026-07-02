@@ -6,27 +6,6 @@ import (
 	"github.com/iostrovok/go-convert"
 )
 
-func TestBool_new(t *testing.T) {
-	EqualBool(t, convert.Bool(1), true)
-	EqualBool(t, convert.Bool(1), true)
-	EqualBool(t, convert.Bool("1"), true)
-	EqualBool(t, convert.Bool("-1"), true)
-	EqualBool(t, convert.Bool(true), true)
-	EqualBool(t, convert.Bool("True"), true)
-	EqualBool(t, convert.Bool("true"), true)
-	EqualBool(t, convert.Bool("t"), true)
-	EqualBool(t, convert.Bool(0.1), true)
-
-	EqualBool(t, convert.Bool("0"), false)
-	EqualBool(t, convert.Bool(false), false)
-	EqualBool(t, convert.Bool(""), false)
-	EqualBool(t, convert.Bool("false"), false)
-	EqualBool(t, convert.Bool("False"), false)
-	EqualBool(t, convert.Bool("f"), false)
-	EqualBool(t, convert.Bool(0), false)
-	EqualBool(t, convert.Bool(0.0), false)
-}
-
 func TestBool(t *testing.T) {
 	EqualBool(t, convert.Bool(1), true)
 	EqualBool(t, convert.Bool("1"), true)

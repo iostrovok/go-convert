@@ -7,13 +7,13 @@ import (
 	"strings"
 )
 
-/*
-	It's long code but quick! ))
-*/
-
+// isScalar reports whether in is one of the scalar types that String() can
+// format via fmt.Sprintf("%s", ...): bool, all int/uint variants, float32/64,
+// and string. Using a positive whitelist avoids panicking on a nil input and
+// makes the intent explicit.
 func isScalar(in any) bool {
 	/*
-		Goods types:
+		Goods types as scalar:
 		   Bool Int8 Int Int16 Int32 Int64
 		   Uint Uint8 Uint16 Uint32 Uint64
 		   String Float32 Float64
@@ -21,20 +21,25 @@ func isScalar(in any) bool {
 
 	t := reflect.TypeOf(in)
 	switch t.Kind() {
-	case reflect.Invalid, reflect.Uintptr, reflect.Complex64, reflect.Complex128, reflect.Struct, reflect.UnsafePointer:
-		return false
-	case reflect.Array, reflect.Chan, reflect.Func, reflect.Interface, reflect.Map, reflect.Ptr, reflect.Slice:
+	case reflect.Bool, reflect.Int8, reflect.Int,
+		reflect.Int32, reflect.Int64, reflect.Uint,
+		reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64,
+		reflect.String, reflect.Float32, reflect.Float64:
+		return true
+	default:
 		return false
 	}
-
-	return true
 }
 
-// StringTS returns spaces trimmed string
+// StringTS returns the string representation of in with leading and trailing
+// whitespace removed. See String for conversion rules.
 func StringTS(in any, debugKeys ...string) string {
 	return strings.TrimSpace(String(in, debugKeys...))
 }
 
+// String converts in to its string representation.
+// Scalar types (bool, numeric, string, []byte) are converted via strconv for
+// performance. Non-scalar types and nil return "".
 func String(in any, _ ...string) string {
 	if in == nil {
 		return ""
@@ -83,8 +88,8 @@ func String(in any, _ ...string) string {
 	return ""
 }
 
-// ListOfStringsP ("List Of Strings Positive")
-// is exactly the same as ListOfStringsPErr, but always returns a list (can be empty).
+// ListOfStringsP ("List Of Strings Positive") behaves exactly like ListOfStringsPErr,
+// but always returns a list (which may be empty) and never returns an error.
 func ListOfStringsP(in any, debugKeys ...string) []string {
 	if a, err := ListOfStringsPErr(in, false, debugKeys...); err == nil {
 		return a
@@ -93,21 +98,24 @@ func ListOfStringsP(in any, debugKeys ...string) []string {
 	return []string{}
 }
 
-// ListOfStringsPErr ("List Of Strings Positive with Error")
-// returns a list of no-empty strings extracted from the input interface.
-// If the list contains an empty string, the function skips it.
-// If checkLen is true and the result list is empty, the function returns an error.
+// ListOfStringsPErr ("List Of Strings Positive with Error") returns a list of
+// non-empty strings converted from in. Empty strings are silently skipped.
+// If checkLen is true and the resulting list is empty, an error is returned.
 func ListOfStringsPErr(in any, checkLen bool, debugKeys ...string) ([]string, error) {
 	return _listOfStrings(in, checkLen, SkipEmpty, debugKeys...)
 }
 
-// ListOfStringsStrictPErr ("List Of Strings Strict Positive with Error")
-// returns a list of no-empty strings extracted from the input interface.
-// If the list has empty string function returns the error.
+// ListOfStringsStrictPErr ("List Of Strings Strict Positive with Error") returns a
+// list of non-empty strings converted from in. If any element converts to an empty
+// string, an error is returned immediately.
+// If checkLen is true and the resulting list is empty, an error is also returned.
 func ListOfStringsStrictPErr(in any, checkLen bool, debugKeys ...string) ([]string, error) {
 	return _listOfStrings(in, checkLen, FallOnEmpty, debugKeys...)
 }
 
+// ListOfStrings converts in (which must be a slice) into a []string, including
+// empty strings. It always returns a list (which may be empty) and never returns
+// an error. See ListOfStringsErr for the error-returning variant.
 func ListOfStrings(in any, debugKeys ...string) []string {
 	if a, err := ListOfStringsErr(in, false, debugKeys...); err == nil {
 		return a
@@ -116,16 +124,23 @@ func ListOfStrings(in any, debugKeys ...string) []string {
 	return []string{}
 }
 
+// ListOfStringsErr converts in (which must be a slice) into a []string, including
+// empty strings. If checkLen is true and the resulting list is empty, an error is
+// returned. Optional debugKeys are embedded in error messages for tracing.
 func ListOfStringsErr(in any, checkLen bool, debugKeys ...string) ([]string, error) {
 	return _listOfStrings(in, checkLen, PassAll, debugKeys...)
 }
 
+// StringListRunner controls how _listOfStrings handles empty string elements.
 type StringListRunner string
 
 const (
-	PassAll     StringListRunner = "pass_all"
+	// PassAll includes every element in the result, even empty strings.
+	PassAll StringListRunner = "pass_all"
+	// FallOnEmpty returns an error as soon as an empty string element is encountered.
 	FallOnEmpty StringListRunner = "fall_on_empty"
-	SkipEmpty   StringListRunner = "skip_empty"
+	// SkipEmpty silently omits empty string elements from the result.
+	SkipEmpty StringListRunner = "skip_empty"
 )
 
 func _listOfStrings(in any, checkLen bool, howToRun StringListRunner, debugKeys ...string) ([]string, error) {

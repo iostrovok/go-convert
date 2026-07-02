@@ -6,6 +6,12 @@ import (
 	"strings"
 )
 
+// Bool converts in to a bool using the following rules:
+//   - nil            → false
+//   - bool           → the value itself
+//   - numeric        → false if zero, true otherwise
+//   - string / []byte → false for "", "false", "f", "0" (case-insensitive); true otherwise
+//   - slice / map    → false if empty, true otherwise
 func Bool(in any) bool {
 	if in == nil {
 		return false
@@ -47,6 +53,8 @@ func Bool(in any) bool {
 	}
 }
 
+// BoolErr converts in to a bool. It always succeeds; the error is always nil.
+// See Bool for conversion rules.
 func BoolErr(in any) (bool, error) {
 	return Bool(in), nil
 }

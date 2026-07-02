@@ -1,9 +1,5 @@
 package convert
 
-/*
-	It's long code but quick! ))
-*/
-
 import (
 	"fmt"
 	"log"
@@ -11,6 +7,9 @@ import (
 	"strconv"
 )
 
+// Uint32 converts in to a uint32. Returns 0 on error.
+// If debugKeys are provided and an error occurs, the error is logged.
+// Optional debugKeys are embedded in error messages for tracing.
 func Uint32(in any, debugKeys ...string) uint32 {
 	out, err := Uint32Err(in, debugKeys...)
 	if err != nil {
@@ -23,6 +22,9 @@ func Uint32(in any, debugKeys ...string) uint32 {
 	return out
 }
 
+// Uint32Err converts in to a uint32. Returns an error if the conversion fails
+// or if the value exceeds math.MaxUint32.
+// Optional debugKeys are embedded in error messages for tracing.
 func Uint32Err(in any, debugKeys ...string) (uint32, error) {
 	u64, err := Uint64Err(in, debugKeys...)
 	if err != nil {
@@ -36,6 +38,9 @@ func Uint32Err(in any, debugKeys ...string) (uint32, error) {
 	return uint32(u64), nil
 }
 
+// Uint64 converts in to a uint64. Returns 0 on error.
+// If debugKeys are provided and an error occurs, the error is logged.
+// Optional debugKeys are embedded in error messages for tracing.
 func Uint64(in any, debugKeys ...string) uint64 {
 
 	out, err := Uint64Err(in, debugKeys...)
@@ -48,6 +53,10 @@ func Uint64(in any, debugKeys ...string) uint64 {
 	return out
 }
 
+// Uint64Err converts in to a uint64. Accepted types: all integer and float types,
+// bool (true→1, false→0), string, and []byte. nil is treated as 0 (no error).
+// Returns an error for unconvertible values.
+// Optional debugKeys are embedded in error messages for tracing.
 func Uint64Err(in any, debugKeys ...string) (uint64, error) {
 
 	if in == nil {
